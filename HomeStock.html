@@ -1,4 +1,1770 @@
-<script>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='70' font-size='80'%3E📦%3C/text%3E%3C/svg%3E">
+  <title>HomeStock Pro — Мой каталог вещей</title>
+  <!-- подключение библиотеки qrcode (canvas минифицировано) -->
+  <script>
+    /* Минифицированная библиотека qrcode@1.5.1 – не изменять */
+    var QRCode=function(t){"use strict";var r,e=function(){return"function"==typeof Promise&&Promise.prototype&&Promise.prototype.then},n=[0,26,44,70,100,134,172,196,242,292,346,404,466,532,581,655,733,815,901,991,1085,1156,1258,1364,1474,1588,1706,1828,1921,2051,2185,2323,2465,2611,2761,2876,3034,3196,3362,3532,3706],o=function(t){if(!t)throw new Error('"version" cannot be null or undefined');if(t<1||t>40)throw new Error('"version" should be in range from 1 to 40');return 4*t+17},a=function(t){return n[t]},i=function(t){for(var r=0;0!==t;)r++,t>>>=1;return r},u=function(t){if("function"!=typeof t)throw new Error('"toSJISFunc" is not a valid function.');r=t},s=function(){return void 0!==r},f=function(t){return r(t)};function h(t,r){return t(r={exports:{}},r.exports),r.exports}var c=h((function(t,r){r.L={bit:1},r.M={bit:0},r.Q={bit:3},r.H={bit:2},r.isValid=function(t){return t&&void 0!==t.bit&&t.bit>=0&&t.bit<4},r.from=function(t,e){if(r.isValid(t))return t;try{return function(t){if("string"!=typeof t)throw new Error("Param is not a string");switch(t.toLowerCase()){case"l":case"low":return r.L;case"m":case"medium":return r.M;case"q":case"quartile":return r.Q;case"h":case"high":return r.H;default:throw new Error("Unknown EC Level: "+t)}}(t)}catch(t){return e}}}));function g(){this.buffer=[],this.length=0}c.L,c.M,c.Q,c.H,c.isValid,g.prototype={get:function(t){var r=Math.floor(t/8);return 1==(this.buffer[r]>>>7-t%8&1)},put:function(t,r){for(var e=0;e<r;e++)this.putBit(1==(t>>>r-e-1&1))},getLengthInBits:function(){return this.length},putBit:function(t){var r=Math.floor(this.length/8);this.buffer.length<=r&&this.buffer.push(0),t&&(this.buffer[r]|=128>>>this.length%8),this.length++}};var d=g;function l(t){if(!t||t<1)throw new Error("BitMatrix size must be defined and greater than 0");this.size=t,this.data=new Uint8Array(t*t),this.reservedBit=new Uint8Array(t*t)}l.prototype.set=function(t,r,e,n){var o=t*this.size+r;this.data[o]=e,n&&(this.reservedBit[o]=!0)},l.prototype.get=function(t,r){return this.data[t*this.size+r]},l.prototype.xor=function(t,r,e){this.data[t*this.size+r]^=e},l.prototype.isReserved=function(t,r){return this.reservedBit[t*this.size+r]};var v=l,p=h((function(t,r){var e=o;r.getRowColCoords=function(t){if(1===t)return[];for(var r=Math.floor(t/7)+2,n=e(t),o=145===n?26:2*Math.ceil((n-13)/(2*r-2)),a=[n-7],i=1;i<r-1;i++)a[i]=a[i-1]-o;return a.push(6),a.reverse()},r.getPositions=function(t){for(var e=[],n=r.getRowColCoords(t),o=n.length,a=0;a<o;a++)for(var i=0;i<o;i++)0===a&&0===i||0===a&&i===o-1||a===o-1&&0===i||e.push([n[a],n[i]]);return e}}));p.getRowColCoords,p.getPositions;var w=o,m=function(t){var r=w(t);return[[0,0],[r-7,0],[0,r-7]]},E=h((function(t,r){r.Patterns={PATTERN000:0,PATTERN001:1,PATTERN010:2,PATTERN011:3,PATTERN100:4,PATTERN101:5,PATTERN110:6,PATTERN111:7};var e=3,n=3,o=40,a=10;function i(t,e,n){switch(t){case r.Patterns.PATTERN000:return(e+n)%2==0;case r.Patterns.PATTERN001:return e%2==0;case r.Patterns.PATTERN010:return n%3==0;case r.Patterns.PATTERN011:return(e+n)%3==0;case r.Patterns.PATTERN100:return(Math.floor(e/2)+Math.floor(n/3))%2==0;case r.Patterns.PATTERN101:return e*n%2+e*n%3==0;case r.Patterns.PATTERN110:return(e*n%2+e*n%3)%2==0;case r.Patterns.PATTERN111:return(e*n%3+(e+n)%2)%2==0;default:throw new Error("bad maskPattern:"+t)}}r.isValid=function(t){return null!=t&&""!==t&&!isNaN(t)&&t>=0&&t<=7},r.from=function(t){return r.isValid(t)?parseInt(t,10):void 0},r.getPenaltyN1=function(t){for(var r=t.size,n=0,o=0,a=0,i=null,u=null,s=0;s<r;s++){o=a=0,i=u=null;for(var f=0;f<r;f++){var h=t.get(s,f);h===i?o++:(o>=5&&(n+=e+(o-5)),i=h,o=1),(h=t.get(f,s))===u?a++:(a>=5&&(n+=e+(a-5)),u=h,a=1)}o>=5&&(n+=e+(o-5)),a>=5&&(n+=e+(a-5))}return n},r.getPenaltyN2=function(t){for(var r=t.size,e=0,o=0;o<r-1;o++)for(var a=0;a<r-1;a++){var i=t.get(o,a)+t.get(o,a+1)+t.get(o+1,a)+t.get(o+1,a+1);4!==i&&0!==i||e++}return e*n},r.getPenaltyN3=function(t){for(var r=t.size,e=0,n=0,a=0,i=0;i<r;i++){n=a=0;for(var u=0;u<r;u++)n=n<<1&2047|t.get(i,u),u>=10&&(1488===n||93===n)&&e++,a=a<<1&2047|t.get(u,i),u>=10&&(1488===a||93===a)&&e++}return e*o},r.getPenaltyN4=function(t){for(var r=0,e=t.data.length,n=0;n<e;n++)r+=t.data[n];return Math.abs(Math.ceil(100*r/e/5)-10)*a},r.applyMask=function(t,r){for(var e=r.size,n=0;n<e;n++)for(var o=0;o<e;o++)r.isReserved(o,n)||r.xor(o,n,i(t,o,n))},r.getBestMask=function(t,e){for(var n=Object.keys(r.Patterns).length,o=0,a=1/0,i=0;i<n;i++){e(i),r.applyMask(i,t);var u=r.getPenaltyN1(t)+r.getPenaltyN2(t)+r.getPenaltyN3(t)+r.getPenaltyN4(t);r.applyMask(i,t),u<a&&(a=u,o=i)}return o}}));E.Patterns,E.isValid,E.getPenaltyN1,E.getPenaltyN2,E.getPenaltyN3,E.getPenaltyN4,E.applyMask,E.getBestMask;var y=[1,1,1,1,1,1,1,1,1,1,2,2,1,2,2,4,1,2,4,4,2,4,4,4,2,4,6,5,2,4,6,6,2,5,8,8,4,5,8,8,4,5,8,11,4,8,10,11,4,9,12,16,4,9,16,16,6,10,12,18,6,10,17,16,6,11,16,19,6,13,18,21,7,14,21,25,8,16,20,25,8,17,23,25,9,17,23,34,9,18,25,30,10,20,27,32,12,21,29,35,12,23,34,37,12,25,34,40,13,26,35,42,14,28,38,45,15,29,40,48,16,31,43,51,17,33,45,54,18,35,48,57,19,37,51,60,19,38,53,63,20,40,56,66,21,43,59,70,22,45,62,74,24,47,65,77,25,49,68,81],A=[7,10,13,17,10,16,22,28,15,26,36,44,20,36,52,64,26,48,72,88,36,64,96,112,40,72,108,130,48,88,132,156,60,110,160,192,72,130,192,224,80,150,224,264,96,176,260,308,104,198,288,352,120,216,320,384,132,240,360,432,144,280,408,480,168,308,448,532,180,338,504,588,196,364,546,650,224,416,600,700,224,442,644,750,252,476,690,816,270,504,750,900,300,560,810,960,312,588,870,1050,336,644,952,1110,360,700,1020,1200,390,728,1050,1260,420,784,1140,1350,450,812,1200,1440,480,868,1290,1530,510,924,1350,1620,540,980,1440,1710,570,1036,1530,1800,570,1064,1590,1890,600,1120,1680,1980,630,1204,1770,2100,660,1260,1860,2220,720,1316,1950,2310,750,1372,2040,2430],I=function(t,r){switch(r){case c.L:return y[4*(t-1)+0];case c.M:return y[4*(t-1)+1];case c.Q:return y[4*(t-1)+2];case c.H:return y[4*(t-1)+3];default:return}},M=function(t,r){switch(r){case c.L:return A[4*(t-1)+0];case c.M:return A[4*(t-1)+1];case c.Q:return A[4*(t-1)+2];case c.H:return A[4*(t-1)+3];default:return}},N=new Uint8Array(512),B=new Uint8Array(256);!function(){for(var t=1,r=0;r<255;r++)N[r]=t,B[t]=r,256&(t<<=1)&&(t^=285);for(var e=255;e<512;e++)N[e]=N[e-255]}();var C=function(t){return N[t]},P=function(t,r){return 0===t||0===r?0:N[B[t]+B[r]]},R=h((function(t,r){r.mul=function(t,r){for(var e=new Uint8Array(t.length+r.length-1),n=0;n<t.length;n++)for(var o=0;o<r.length;o++)e[n+o]^=P(t[n],r[o]);return e},r.mod=function(t,r){for(var e=new Uint8Array(t);e.length-r.length>=0;){for(var n=e[0],o=0;o<r.length;o++)e[o]^=P(r[o],n);for(var a=0;a<e.length&&0===e[a];)a++;e=e.slice(a)}return e},r.generateECPolynomial=function(t){for(var e=new Uint8Array([1]),n=0;n<t;n++)e=r.mul(e,new Uint8Array([1,C(n)]));return e}}));function T(t){this.genPoly=void 0,this.degree=t,this.degree&&this.initialize(this.degree)}R.mul,R.mod,R.generateECPolynomial,T.prototype.initialize=function(t){this.degree=t,this.genPoly=R.generateECPolynomial(this.degree)},T.prototype.encode=function(t){if(!this.genPoly)throw new Error("Encoder not initialized");var r=new Uint8Array(t.length+this.degree);r.set(t);var e=R.mod(r,this.genPoly),n=this.degree-e.length;if(n>0){var o=new Uint8Array(this.degree);return o.set(e,n),o}return e};var L=T,b=function(t){return!isNaN(t)&&t>=1&&t<=40},U="(?:[u3000-u303F]|[u3040-u309F]|[u30A0-u30FF]|[uFF00-uFFEF]|[u4E00-u9FAF]|[u2605-u2606]|[u2190-u2195]|u203B|[u2010u2015u2018u2019u2025u2026u201Cu201Du2225u2260]|[u0391-u0451]|[u00A7u00A8u00B1u00B4u00D7u00F7])+",x="(?:(?![A-Z0-9 $%*+\\-./:]|"+(U=U.replace(/u/g,"\\u"))+")(?:.|[\r\n]))+",k=new RegExp(U,"g"),F=new RegExp("[^A-Z0-9 $%*+\\-./:]+","g"),S=new RegExp(x,"g"),D=new RegExp("[0-9]+","g"),Y=new RegExp("[A-Z $%*+\\-./:]+","g"),_=new RegExp("^"+U+"$"),z=new RegExp("^[0-9]+$"),H=new RegExp("^[A-Z0-9 $%*+\\-./:]+$"),J={KANJI:k,BYTE_KANJI:F,BYTE:S,NUMERIC:D,ALPHANUMERIC:Y,testKanji:function(t){return _.test(t)},testNumeric:function(t){return z.test(t)},testAlphanumeric:function(t){return H.test(t)}},K=h((function(t,r){r.NUMERIC={id:"Numeric",bit:1,ccBits:[10,12,14]},r.ALPHANUMERIC={id:"Alphanumeric",bit:2,ccBits:[9,11,13]},r.BYTE={id:"Byte",bit:4,ccBits:[8,16,16]},r.KANJI={id:"Kanji",bit:8,ccBits:[8,10,12]},r.MIXED={bit:-1},r.getCharCountIndicator=function(t,r){if(!t.ccBits)throw new Error("Invalid mode: "+t);if(!b(r))throw new Error("Invalid version: "+r);return r>=1&&r<10?t.ccBits[0]:r<27?t.ccBits[1]:t.ccBits[2]},r.getBestModeForData=function(t){return J.testNumeric(t)?r.NUMERIC:J.testAlphanumeric(t)?r.ALPHANUMERIC:J.testKanji(t)?r.KANJI:r.BYTE},r.toString=function(t){if(t&&t.id)return t.id;throw new Error("Invalid mode")},r.isValid=function(t){return t&&t.bit&&t.ccBits},r.from=function(t,e){if(r.isValid(t))return t;try{return function(t){if("string"!=typeof t)throw new Error("Param is not a string");switch(t.toLowerCase()){case"numeric":return r.NUMERIC;case"alphanumeric":return r.ALPHANUMERIC;case"kanji":return r.KANJI;case"byte":return r.BYTE;default:throw new Error("Unknown mode: "+t)}}(t)}catch(t){return e}}}));K.NUMERIC,K.ALPHANUMERIC,K.BYTE,K.KANJI,K.MIXED,K.getCharCountIndicator,K.getBestModeForData,K.isValid;var O=h((function(t,r){var e=i(7973);function n(t,r){return K.getCharCountIndicator(t,r)+4}function o(t,r){var e=0;return t.forEach((function(t){var o=n(t.mode,r);e+=o+t.getBitsLength()})),e}r.from=function(t,r){return b(t)?parseInt(t,10):r},r.getCapacity=function(t,r,e){if(!b(t))throw new Error("Invalid QR Code version");void 0===e&&(e=K.BYTE);var o=8*(a(t)-M(t,r));if(e===K.MIXED)return o;var i=o-n(e,t);switch(e){case K.NUMERIC:return Math.floor(i/10*3);case K.ALPHANUMERIC:return Math.floor(i/11*2);case K.KANJI:return Math.floor(i/13);case K.BYTE:default:return Math.floor(i/8)}},r.getBestVersionForData=function(t,e){var n,a=c.from(e,c.M);if(Array.isArray(t)){if(t.length>1)return function(t,e){for(var n=1;n<=40;n++){if(o(t,n)<=r.getCapacity(n,e,K.MIXED))return n}}(t,a);if(0===t.length)return 1;n=t[0]}else n=t;return function(t,e,n){for(var o=1;o<=40;o++)if(e<=r.getCapacity(o,n,t))return o}(n.mode,n.getLength(),a)},r.getEncodedBits=function(t){if(!b(t)||t<7)throw new Error("Invalid QR Code version");for(var r=t<<12;i(r)-e>=0;)r^=7973<<i(r)-e;return t<<12|r}}));O.getCapacity,O.getBestVersionForData,O.getEncodedBits;var Q=i(1335),V=function(t,r){for(var e=t.bit<<3|r,n=e<<10;i(n)-Q>=0;)n^=1335<<i(n)-Q;return 21522^(e<<10|n)};function q(t){this.mode=K.NUMERIC,this.data=t.toString()}q.getBitsLength=function(t){return 10*Math.floor(t/3)+(t%3?t%3*3+1:0)},q.prototype.getLength=function(){return this.data.length},q.prototype.getBitsLength=function(){return q.getBitsLength(this.data.length)},q.prototype.write=function(t){var r,e,n;for(r=0;r+3<=this.data.length;r+=3)e=this.data.substr(r,3),n=parseInt(e,10),t.put(n,10);var o=this.data.length-r;o>0&&(e=this.data.substr(r),n=parseInt(e,10),t.put(n,3*o+1))};var j=q,$=["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Y","Z"," ","$","%","*","+","-",".","/",":"];function X(t){this.mode=K.ALPHANUMERIC,this.data=t}X.getBitsLength=function(t){return 11*Math.floor(t/2)+t%2*6},X.prototype.getLength=function(){return this.data.length},X.prototype.getBitsLength=function(){return X.getBitsLength(this.data.length)},X.prototype.write=function(t){var r;for(r=0;r+2<=this.data.length;r+=2){var e=45*$.indexOf(this.data[r]);e+=$.indexOf(this.data[r+1]),t.put(e,11)}this.data.length%2&&t.put($.indexOf(this.data[r]),6)};var Z=X;function W(t){this.mode=K.BYTE,"string"==typeof t&&(t=function(t){for(var r=[],e=t.length,n=0;n<e;n++){var o=t.charCodeAt(n);if(o>=55296&&o<=56319&&e>n+1){var a=t.charCodeAt(n+1);a>=56320&&a<=57343&&(o=1024*(o-55296)+a-56320+65536,n+=1)}o<128?r.push(o):o<2048?(r.push(o>>6|192),r.push(63&o|128)):o<55296||o>=57344&&o<65536?(r.push(o>>12|224),r.push(o>>6&63|128),r.push(63&o|128)):o>=65536&&o<=1114111?(r.push(o>>18|240),r.push(o>>12&63|128),r.push(o>>6&63|128),r.push(63&o|128)):r.push(239,191,189)}return new Uint8Array(r).buffer}(t)),this.data=new Uint8Array(t)}W.getBitsLength=function(t){return 8*t},W.prototype.getLength=function(){return this.data.length},W.prototype.getBitsLength=function(){return W.getBitsLength(this.data.length)},W.prototype.write=function(t){for(var r=0,e=this.data.length;r<e;r++)t.put(this.data[r],8)};var G=W;function tt(t){this.mode=K.KANJI,this.data=t}tt.getBitsLength=function(t){return 13*t},tt.prototype.getLength=function(){return this.data.length},tt.prototype.getBitsLength=function(){return tt.getBitsLength(this.data.length)},tt.prototype.write=function(t){var r;for(r=0;r<this.data.length;r++){var e=f(this.data[r]);if(e>=33088&&e<=40956)e-=33088;else{if(!(e>=57408&&e<=60351))throw new Error("Invalid SJIS character: "+this.data[r]+"\nMake sure your charset is UTF-8");e-=49472}e=192*(e>>>8&255)+(255&e),t.put(e,13)}};var rt=tt,et=h((function(t){var r={single_source_shortest_paths:function(t,e,n){var o={},a={};a[e]=0;var i,u,s,f,h,c,g,d=r.PriorityQueue.make();for(d.push(e,0);!d.empty();)for(s in u=(i=d.pop()).value,f=i.cost,h=t[u]||{})h.hasOwnProperty(s)&&(c=f+h[s],g=a[s],(void 0===a[s]||g>c)&&(a[s]=c,d.push(s,c),o[s]=u));if(void 0!==n&&void 0===a[n]){var l=["Could not find a path from ",e," to ",n,"."].join("");throw new Error(l)}return o},extract_shortest_path_from_predecessor_list:function(t,r){for(var e=[],n=r;n;)e.push(n),n=t[n];return e.reverse(),e},find_path:function(t,e,n){var o=r.single_source_shortest_paths(t,e,n);return r.extract_shortest_path_from_predecessor_list(o,n)},PriorityQueue:{make:function(t){var e,n=r.PriorityQueue,o={};for(e in t=t||{},n)n.hasOwnProperty(e)&&(o[e]=n[e]);return o.queue=[],o.sorter=t.sorter||n.default_sorter,o},default_sorter:function(t,r){return t.cost-r.cost},push:function(t,r){var e={value:t,cost:r};this.queue.push(e),this.queue.sort(this.sorter)},pop:function(){return this.queue.shift()},empty:function(){return 0===this.queue.length}}};t.exports=r})),nt=h((function(t,r){function e(t){return unescape(encodeURIComponent(t)).length}function n(t,r,e){for(var n,o=[];null!==(n=t.exec(e));)o.push({data:n[0],index:n.index,mode:r,length:n[0].length});return o}function o(t){var r,e,o=n(J.NUMERIC,K.NUMERIC,t),a=n(J.ALPHANUMERIC,K.ALPHANUMERIC,t);return s()?(r=n(J.BYTE,K.BYTE,t),e=n(J.KANJI,K.KANJI,t)):(r=n(J.BYTE_KANJI,K.BYTE,t),e=[]),o.concat(a,r,e).sort((function(t,r){return t.index-r.index})).map((function(t){return{data:t.data,mode:t.mode,length:t.length}}))}function a(t,r){switch(r){case K.NUMERIC:return j.getBitsLength(t);case K.ALPHANUMERIC:return Z.getBitsLength(t);case K.KANJI:return rt.getBitsLength(t);case K.BYTE:return G.getBitsLength(t)}}function i(t,r){var e,n=K.getBestModeForData(t);if((e=K.from(r,n))!==K.BYTE&&e.bit<n.bit)throw new Error('"'+t+'" cannot be encoded with mode '+K.toString(e)+".\n Suggested mode is: "+K.toString(n));switch(e!==K.KANJI||s()||(e=K.BYTE),e){case K.NUMERIC:return new j(t);case K.ALPHANUMERIC:return new Z(t);case K.KANJI:return new rt(t);case K.BYTE:return new G(t)}}r.fromArray=function(t){return t.reduce((function(t,r){return"string"==typeof r?t.push(i(r,null)):r.data&&t.push(i(r.data,r.mode)),t}),[])},r.fromString=function(t,n){for(var i=function(t,r){for(var e={},n={start:{}},o=["start"],i=0;i<t.length;i++){for(var u=t[i],s=[],f=0;f<u.length;f++){var h=u[f],c=""+i+f;s.push(c),e[c]={node:h,lastCount:0},n[c]={};for(var g=0;g<o.length;g++){var d=o[g];e[d]&&e[d].node.mode===h.mode?(n[d][c]=a(e[d].lastCount+h.length,h.mode)-a(e[d].lastCount,h.mode),e[d].lastCount+=h.length):(e[d]&&(e[d].lastCount=h.length),n[d][c]=a(h.length,h.mode)+4+K.getCharCountIndicator(h.mode,r))}}o=s}for(var l=0;l<o.length;l++)n[o[l]].end=0;return{map:n,table:e}}(function(t){for(var r=[],n=0;n<t.length;n++){var o=t[n];switch(o.mode){case K.NUMERIC:r.push([o,{data:o.data,mode:K.ALPHANUMERIC,length:o.length},{data:o.data,mode:K.BYTE,length:o.length}]);break;case K.ALPHANUMERIC:r.push([o,{data:o.data,mode:K.BYTE,length:o.length}]);break;case K.KANJI:r.push([o,{data:o.data,mode:K.BYTE,length:e(o.data)}]);break;case K.BYTE:r.push([{data:o.data,mode:K.BYTE,length:e(o.data)}])}}return r}(o(t)),n),u=et.find_path(i.map,"start","end"),s=[],f=1;f<u.length-1;f++)s.push(i.table[u[f]].node);return r.fromArray(function(t){return t.reduce((function(t,r){var e=t.length-1>=0?t[t.length-1]:null;return e&&e.mode===r.mode?(t[t.length-1].data+=r.data,t):(t.push(r),t)}),[])}(s))},r.rawSplit=function(t){return r.fromArray(o(t))}}));function ot(t,r,e){var n,o,a=t.size,i=V(r,e);for(n=0;n<15;n++)o=1==(i>>n&1),n<6?t.set(n,8,o,!0):n<8?t.set(n+1,8,o,!0):t.set(a-15+n,8,o,!0),n<8?t.set(8,a-n-1,o,!0):n<9?t.set(8,15-n-1+1,o,!0):t.set(8,15-n-1,o,!0);t.set(a-8,8,1,!0)}function at(t,r,e){var n=new d;e.forEach((function(r){n.put(r.mode.bit,4),n.put(r.getLength(),K.getCharCountIndicator(r.mode,t)),r.write(n)}));var o=8*(a(t)-M(t,r));for(n.getLengthInBits()+4<=o&&n.put(0,4);n.getLengthInBits()%8!=0;)n.putBit(0);for(var i=(o-n.getLengthInBits())/8,u=0;u<i;u++)n.put(u%2?17:236,8);return function(t,r,e){for(var n=a(r),o=M(r,e),i=n-o,u=I(r,e),s=u-n%u,f=Math.floor(n/u),h=Math.floor(i/u),c=h+1,g=f-h,d=new L(g),l=0,v=new Array(u),p=new Array(u),w=0,m=new Uint8Array(t.buffer),E=0;E<u;E++){var y=E<s?h:c;v[E]=m.slice(l,l+y),p[E]=d.encode(v[E]),l+=y,w=Math.max(w,y)}var A,N,B=new Uint8Array(n),C=0;for(A=0;A<w;A++)for(N=0;N<u;N++)A<v[N].length&&(B[C++]=v[N][A]);for(A=0;A<g;A++)for(N=0;N<u;N++)B[C++]=p[N][A];return B}(n,t,r)}function it(t,r,e,n){var a;if(Array.isArray(t))a=nt.fromArray(t);else{if("string"!=typeof t)throw new Error("Invalid data");var i=r;if(!i){var u=nt.rawSplit(t);i=O.getBestVersionForData(u,e)}a=nt.fromString(t,i||40)}var s=O.getBestVersionForData(a,e);if(!s)throw new Error("The amount of data is too big to be stored in a QR Code");if(r){if(r<s)throw new Error("\nThe chosen QR Code version cannot contain this amount of data.\nMinimum version required to store current data is: "+s+".\n")}else r=s;var f=at(r,e,a),h=o(r),c=new v(h);return function(t,r){for(var e=t.size,n=m(r),o=0;o<n.length;o++)for(var a=n[o][0],i=n[o][1],u=-1;u<=7;u++)if(!(a+u<=-1||e<=a+u))for(var s=-1;s<=7;s++)i+s<=-1||e<=i+s||(u>=0&&u<=6&&(0===s||6===s)||s>=0&&s<=6&&(0===u||6===u)||u>=2&&u<=4&&s>=2&&s<=4?t.set(a+u,i+s,!0,!0):t.set(a+u,i+s,!1,!0))}(c,r),function(t){for(var r=t.size,e=8;e<r-8;e++){var n=e%2==0;t.set(e,6,n,!0),t.set(6,e,n,!0)}}(c),function(t,r){for(var e=p.getPositions(r),n=0;n<e.length;n++)for(var o=e[n][0],a=e[n][1],i=-2;i<=2;i++)for(var u=-2;u<=2;u++)-2===i||2===i||-2===u||2===u||0===i&&0===u?t.set(o+i,a+u,!0,!0):t.set(o+i,a+u,!1,!0)}(c,r),ot(c,e,0),r>=7&&function(t,r){for(var e,n,o,a=t.size,i=O.getEncodedBits(r),u=0;u<18;u++)e=Math.floor(u/3),n=u%3+a-8-3,o=1==(i>>u&1),t.set(e,n,o,!0),t.set(n,e,o,!0)}(c,r),function(t,r){for(var e=t.size,n=-1,o=e-1,a=7,i=0,u=e-1;u>0;u-=2)for(6===u&&u--;;){for(var s=0;s<2;s++)if(!t.isReserved(o,u-s)){var f=!1;i<r.length&&(f=1==(r[i]>>>a&1)),t.set(o,u-s,f),-1===--a&&(i++,a=7)}if((o+=n)<0||e<=o){o-=n,n=-n;break}}}(c,f),isNaN(n)&&(n=E.getBestMask(c,ot.bind(null,c,e))),E.applyMask(n,c),ot(c,e,n),{modules:c,version:r,errorCorrectionLevel:e,maskPattern:n,segments:a}}nt.fromArray,nt.fromString,nt.rawSplit;var ut=function(t,r){if(void 0===t||""===t)throw new Error("No input text");var e,n,o=c.M;return void 0!==r&&(o=c.from(r.errorCorrectionLevel,c.M),e=O.from(r.version),n=E.from(r.maskPattern),r.toSJISFunc&&u(r.toSJISFunc)),it(t,e,o,n)},st=h((function(t,r){function e(t){if("number"==typeof t&&(t=t.toString()),"string"!=typeof t)throw new Error("Color should be defined as hex string");var r=t.slice().replace("#","").split("");if(r.length<3||5===r.length||r.length>8)throw new Error("Invalid hex color: "+t);3!==r.length&&4!==r.length||(r=Array.prototype.concat.apply([],r.map((function(t){return[t,t]})))),6===r.length&&r.push("F","F");var e=parseInt(r.join(""),16);return{r:e>>24&255,g:e>>16&255,b:e>>8&255,a:255&e,hex:"#"+r.slice(0,6).join("")}}r.getOptions=function(t){t||(t={}),t.color||(t.color={});var r=void 0===t.margin||null===t.margin||t.margin<0?4:t.margin,n=t.width&&t.width>=21?t.width:void 0,o=t.scale||4;return{width:n,scale:n?4:o,margin:r,color:{dark:e(t.color.dark||"#000000ff"),light:e(t.color.light||"#ffffffff")},type:t.type,rendererOpts:t.rendererOpts||{}}},r.getScale=function(t,r){return r.width&&r.width>=t+2*r.margin?r.width/(t+2*r.margin):r.scale},r.getImageWidth=function(t,e){var n=r.getScale(t,e);return Math.floor((t+2*e.margin)*n)},r.qrToImageData=function(t,e,n){for(var o=e.modules.size,a=e.modules.data,i=r.getScale(o,n),u=Math.floor((o+2*n.margin)*i),s=n.margin*i,f=[n.color.light,n.color.dark],h=0;h<u;h++)for(var c=0;c<u;c++){var g=4*(h*u+c),d=n.color.light;if(h>=s&&c>=s&&h<u-s&&c<u-s)d=f[a[Math.floor((h-s)/i)*o+Math.floor((c-s)/i)]?1:0];t[g++]=d.r,t[g++]=d.g,t[g++]=d.b,t[g]=d.a}}}));st.getOptions,st.getScale,st.getImageWidth,st.qrToImageData;var ft=h((function(t,r){r.render=function(t,r,e){var n=e,o=r;void 0!==n||r&&r.getContext||(n=r,r=void 0),r||(o=function(){try{return document.createElement("canvas")}catch(t){throw new Error("You need to specify a canvas element")}}()),n=st.getOptions(n);var a=st.getImageWidth(t.modules.size,n),i=o.getContext("2d"),u=i.createImageData(a,a);return st.qrToImageData(u.data,t,n),function(t,r,e){t.clearRect(0,0,r.width,r.height),r.style||(r.style={}),r.height=e,r.width=e,r.style.height=e+"px",r.style.width=e+"px"}(i,o,a),i.putImageData(u,0,0),o},r.renderToDataURL=function(t,e,n){var o=n;void 0!==o||e&&e.getContext||(o=e,e=void 0),o||(o={});var a=r.render(t,e,o),i=o.type||"image/png",u=o.rendererOpts||{};return a.toDataURL(i,u.quality)}}));function ht(t,r){var e=t.a/255,n=r+'="'+t.hex+'"';return e<1?n+" "+r+'-opacity="'+e.toFixed(2).slice(1)+'"':n}function ct(t,r,e){var n=t+r;return void 0!==e&&(n+=" "+e),n}ft.render,ft.renderToDataURL;var gt=function(t,r,e){var n=st.getOptions(r),o=t.modules.size,a=t.modules.data,i=o+2*n.margin,u=n.color.light.a?"<path "+ht(n.color.light,"fill")+' d="M0 0h'+i+"v"+i+'H0z"/>':"",s="<path "+ht(n.color.dark,"stroke")+' d="'+function(t,r,e){for(var n="",o=0,a=!1,i=0,u=0;u<t.length;u++){var s=Math.floor(u%r),f=Math.floor(u/r);s||a||(a=!0),t[u]?(i++,u>0&&s>0&&t[u-1]||(n+=a?ct("M",s+e,.5+f+e):ct("m",o,0),o=0,a=!1),s+1<r&&t[u+1]||(n+=ct("h",i),i=0)):o++}return n}(a,o,n.margin)+'"/>',f='viewBox="0 0 '+i+" "+i+'"',h='<svg xmlns="http://www.w3.org/2000/svg" '+(n.width?'width="'+n.width+'" height="'+n.width+'" ':"")+f+' shape-rendering="crispEdges">'+u+s+"</svg>\n";return"function"==typeof e&&e(null,h),h};function dt(t,r,n,o,a){var i=[].slice.call(arguments,1),u=i.length,s="function"==typeof i[u-1];if(!s&&!e())throw new Error("Callback required as last argument");if(!s){if(u<1)throw new Error("Too few arguments provided");return 1===u?(n=r,r=o=void 0):2!==u||r.getContext||(o=n,n=r,r=void 0),new Promise((function(e,a){try{var i=ut(n,o);e(t(i,r,o))}catch(t){a(t)}}))}if(u<2)throw new Error("Too few arguments provided");2===u?(a=n,n=r,r=o=void 0):3===u&&(r.getContext&&void 0===a?(a=o,o=void 0):(a=o,o=n,n=r,r=void 0));try{var f=ut(n,o);a(null,t(f,r,o))}catch(t){a(t)}}var lt=ut,vt=dt.bind(null,ft.render),pt=dt.bind(null,ft.renderToDataURL),wt=dt.bind(null,(function(t,r,e){return gt(t,e)})),mt={create:lt,toCanvas:vt,toDataURL:pt,toString:wt};return t.create=lt,t.default=mt,t.toCanvas=vt,t.toDataURL=pt,t.toString=wt,Object.defineProperty(t,"__esModule",{value:!0}),t}({});
+  </script>
+  <style>
+    /* === СВЕТЛАЯ ТЕМА (ПО УМОЛЧАНИЮ) === */
+    :root {
+      --primary: #4f46e5;
+      --primary-dark: #4338ca;
+      --primary-light: #818cf8;
+      --secondary: #10b981;
+      --secondary-dark: #059669;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --danger-dark: #dc2626;
+
+      --bg: #f3f4f6;
+      --bg-secondary: #e5e7eb;
+      --card-bg: #ffffff;
+      --text: #1f2937;
+      --text-secondary: #4b5563;
+      --text-light: #6b7280;
+      --border: #e5e7eb;
+      --shadow: rgba(0, 0, 0, 0.1);
+      --modal-overlay: rgba(0, 0, 0, 0.7);
+
+      --note-bg: #fef3c7;
+      --note-text: #92400e;
+      --note-border: #f59e0b;
+      --category-bg: #e0e7ff;
+      --category-text: #4f46e5;
+      --info-bg: #f9fafb;
+    }
+
+    /* === ТЁМНАЯ ТЕМА === */
+    [data-theme="dark"] {
+      --primary: #6366f1;
+      --primary-dark: #818cf8;
+      --primary-light: #a5b4fc;
+      --secondary: #34d399;
+      --secondary-dark: #10b981;
+      --warning: #fbbf24;
+      --danger: #f87171;
+      --danger-dark: #ef4444;
+
+      --bg: #111827;
+      --bg-secondary: #1f2937;
+      --card-bg: #1f2937;
+      --text: #f9fafb;
+      --text-secondary: #d1d5db;
+      --text-light: #9ca3af;
+      --border: #374151;
+      --shadow: rgba(0, 0, 0, 0.3);
+      --modal-overlay: rgba(0, 0, 0, 0.85);
+
+      --note-bg: #422006;
+      --note-text: #fcd34d;
+      --note-border: #f59e0b;
+      --category-bg: #312e81;
+      --category-text: #818cf8;
+      --info-bg: #374151;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+      line-height: 1.5;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .app-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    h1 {
+      color: var(--primary);
+      margin: 0 0 10px 0;
+      font-size: 28px;
+      transition: color 0.3s;
+    }
+
+    /* === ИНДИКАТОР ПАМЯТИ === */
+    .storage-indicator {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 12px 20px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      box-shadow: 0 2px 4px var(--shadow);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .storage-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      flex: 1;
+    }
+
+    .storage-bar {
+      flex: 1;
+      max-width: 300px;
+      height: 8px;
+      background: var(--bg-secondary);
+      border-radius: 4px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .storage-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      border-radius: 4px;
+      transition: width 0.3s, background 0.3s;
+    }
+
+    .storage-fill.warning {
+      background: linear-gradient(90deg, var(--warning), #f97316);
+    }
+
+    .storage-fill.danger {
+      background: linear-gradient(90deg, var(--danger), var(--danger-dark));
+    }
+
+    .storage-text {
+      font-size: 13px;
+      color: var(--text-light);
+      white-space: nowrap;
+    }
+
+    .storage-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    /* === КНОПКА СТАТИСТИКИ И ТЕМЫ === */
+    .btn-stats-main {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-stats-main:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+
+    /* === КНОПКА ПЕРЕКЛЮЧЕНИЯ ТЕМЫ === */
+    .theme-toggle {
+      background: var(--bg-secondary);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+    }
+
+    .theme-toggle:hover {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      transform: rotate(15deg);
+    }
+
+    /* === ФОРМА ДОБАВЛЕНИЯ === */
+    .add-form {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px var(--shadow);
+      margin-bottom: 30px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    .full-width {
+      grid-column: span 2;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      box-sizing: border-box;
+      font-size: 15px;
+      font-family: inherit;
+      transition: border-color 0.2s, background-color 0.2s, color 0.2s;
+      background: var(--card-bg);
+      color: var(--text);
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .form-buttons {
+      grid-column: span 2;
+      display: flex;
+      gap: 10px;
+    }
+
+    button.btn-add {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      flex: 1;
+      transition: all 0.2s;
+    }
+
+    button.btn-add:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    button.btn-cancel {
+      background-color: var(--text-light);
+      color: white;
+      border: none;
+      padding: 14px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      flex: 1;
+      transition: all 0.2s;
+      display: none;
+    }
+
+    button.btn-cancel:hover {
+      background-color: #4b5563;
+    }
+
+    /* === ПАНЕЛЬ ПОИСКА === */
+    .search-panel {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .search-wrapper {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-bar {
+      width: 100%;
+      padding: 15px 45px 15px 15px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .search-clear {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--bg-secondary);
+      border: none;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 18px;
+      color: var(--text-light);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: 0.2s;
+    }
+
+    .search-clear:hover {
+      background: var(--danger);
+      color: white;
+    }
+
+    .search-clear.visible {
+      display: flex;
+    }
+
+    .sort-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sort-label {
+      font-size: 14px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .sort-select {
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      cursor: pointer;
+      background: var(--card-bg);
+      color: var(--text);
+      min-width: 200px;
+    }
+
+    .sort-select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    /* === СЕТКА ТОВАРОВ === */
+    .items-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .item-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px var(--shadow);
+      transition: all 0.2s;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .item-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px var(--shadow);
+    }
+
+    .item-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      background-color: var(--bg-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-light);
+      font-size: 50px;
+      flex-shrink: 0;
+    }
+
+    .item-body {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    /* Общие правила для текстовых элементов карточки (перенос слов) */
+    .item-title,
+    .item-cat,
+    .item-details,
+    .item-note {
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    .item-title {
+      font-weight: 700;
+      font-size: 18px;
+      margin-bottom: 5px;
+      color: var(--text);
+    }
+
+    .item-cat {
+      display: inline-block;
+      background: var(--category-bg);
+      color: var(--category-text);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .item-details {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 5px;
+    }
+
+    .item-location {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    /* Стили для заметки (с ограничением по высоте и фоном) */
+    .item-note {
+      background: var(--note-bg);
+      color: var(--note-text);
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-top: 10px;
+      border-left: 3px solid var(--note-border);
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      /* дополнительный перенос для надёжности */
+      word-break: break-word;
+    }
+
+    /* === КНОПКИ ВСЕГДА ВНИЗУ === */
+    .card-buttons {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+      padding-top: 15px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .card-buttons button {
+      pointer-events: auto;
+    }
+
+    .btn-card {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      flex: 1;
+      transition: 0.2s;
+    }
+
+    .btn-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-edit {
+      background: var(--primary);
+    }
+
+    .btn-edit:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn-qr {
+      background: var(--secondary);
+    }
+
+    .btn-qr:hover {
+      background: var(--secondary-dark);
+    }
+
+    .btn-delete {
+      background: var(--danger);
+    }
+
+    .btn-delete:hover {
+      background: var(--danger-dark);
+    }
+    
+    .btn-delete-photo {
+      background-color: var(--danger);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+      width: 100%;
+      margin-top: 5px;
+    }
+
+    .btn-delete-photo:hover {
+      background-color: var(--danger-dark);
+      transform: translateY(-2px);
+    }
+
+    /* === МОДАЛЬНЫЕ ОКНА === */
+    .detail-modal,
+    .stats-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--modal-overlay);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      z-index: 10000;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--modal-overlay);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      z-index: 10001;
+    }
+
+    .confirm-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--modal-overlay);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(5px);
+      z-index: 10002;
+    }
+
+    .zoom-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 10005;
+      cursor: zoom-out;
+      backdrop-filter: blur(10px);
+    }
+
+    .zoom-modal.show {
+      display: flex;
+      animation: zoomFade 0.2s ease-out;
+    }
+
+    @keyframes zoomFade {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .zoom-content {
+      max-width: 95%;
+      max-height: 95%;
+      position: relative;
+    }
+
+    .zoom-image {
+      max-width: 100%;
+      max-height: 90vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      cursor: zoom-out;
+    }
+
+    .zoom-close {
+      position: absolute;
+      top: -45px;
+      right: 0;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .zoom-close:hover {
+      background: var(--danger);
+      transform: rotate(90deg);
+    }
+
+    .zoom-hint {
+      position: absolute;
+      bottom: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    .modal-content,
+    .detail-content,
+    .confirm-content,
+    .stats-content {
+      background: var(--card-bg);
+      border-radius: 16px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      animation: modalPop 0.3s ease-out;
+      position: relative;
+      max-width: 90%;
+      transition: background-color 0.3s;
+    }
+
+    .modal-content {
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+    }
+
+    .stats-content {
+      padding: 0;
+      max-width: 700px;
+      width: 95%;
+      max-height: 85vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .detail-content {
+      max-width: 900px;
+      width: 95%;
+      max-height: 90vh;
+      overflow-y: auto;
+      animation: detailSlide 0.3s ease-out;
+    }
+
+    @keyframes modalPop {
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    @keyframes detailSlide {
+      from {
+        transform: translateY(50px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    /* Перенос слов в окне QR кода*/
+    .modal-content h3 {
+      margin-top: 0;
+      color: var(--primary);
+      font-size: 22px;
+      overflow-wrap: break-word;
+      /* перенос длинных слов */
+      word-wrap: break-word;
+      /* для старых браузеров */
+      max-width: 100%;
+      /* не выходит за границы */
+      padding: 0 10px;
+      /* небольшие отступы по бокам (опционально) */
+    }
+
+    /* === СТИЛИ ДЛЯ CANVAS ВНУТРИ #QRCODE === */
+    #qrcode {
+      margin: 20px auto;
+      display: flex;
+      justify-content: center;
+      min-height: 200px;
+    }
+
+    #qrcode canvas {
+      border: 1px solid var(--border);
+      padding: 10px;
+      border-radius: 8px;
+      background: white;
+      /* фиксированный белый фон для контраста в любой теме */
+    }
+
+    .modal-note {
+      color: var(--text-light);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-modal {
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .btn-print {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .btn-print:hover {
+      background: var(--secondary-dark);
+      transform: scale(1.05);
+    }
+
+    .btn-close {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-close:hover {
+      background: var(--danger-dark);
+      transform: scale(1.05);
+    }
+
+    .btn-back {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-back:hover {
+      background: var(--primary-dark);
+      transform: scale(1.05);
+    }
+
+    .detail-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+      z-index: 10;
+      transition: 0.2s;
+    }
+
+    .detail-close:hover {
+      background: var(--danger);
+      transform: rotate(90deg);
+    }
+
+    .detail-image {
+      width: 100%;
+      max-height: 250px;
+      object-fit: contain;
+      background: var(--info-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      color: var(--text-light);
+      cursor: zoom-in;
+    }
+
+    .detail-image:hover {
+      opacity: 0.9;
+    }
+
+    .detail-body {
+      padding: 15px 20px;
+    }
+
+    .detail-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 0 0 8px 0;
+    }
+
+    .detail-cat {
+      display: inline-block;
+      background: var(--category-bg);
+      color: var(--category-text);
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    /* Перенос слов в детальном окне */
+    .detail-title,
+    .detail-cat,
+    .detail-info-value {
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    /* Стили для заметки (включая перенос) */
+    .detail-note-text {
+      color: var(--note-text);
+      font-size: 14px;
+      line-height: 1.4;
+      white-space: pre-wrap;
+      max-height: 80px;
+      overflow-y: auto;
+      overflow-wrap: break-word;
+      word-wrap: break-word;
+      max-width: 100%;
+    }
+
+    .detail-info {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+
+    .detail-info-item {
+      background: var(--info-bg);
+      padding: 12px 10px;
+      border-radius: 10px;
+      border-left: 4px solid var(--primary);
+    }
+
+    .detail-info-label {
+      font-size: 10px;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+
+    .detail-info-value {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+      word-break: break-word;
+    }
+
+    .detail-note-section {
+      background: var(--note-bg);
+      border: 2px solid var(--note-border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+    }
+
+    .detail-note-section h4 {
+      margin: 0 0 8px 0;
+      color: var(--note-text);
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+    }
+
+    .detail-actions {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+    }
+
+    .detail-btn {
+      padding: 10px 14px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .detail-btn-edit {
+      background: var(--primary);
+      color: white;
+    }
+
+    .detail-btn-edit:hover {
+      background: var(--primary-dark);
+    }
+
+    .detail-btn-qr {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .detail-btn-qr:hover {
+      background: var(--secondary-dark);
+    }
+
+    .detail-btn-delete {
+      background: var(--danger);
+      color: white;
+    }
+
+    .detail-btn-delete:hover {
+      background: var(--danger-dark);
+    }
+
+    .detail-created {
+      margin-top: 12px;
+      font-size: 11px;
+      color: var(--text-light);
+      text-align: center;
+    }
+
+    /* === ОКНО СТАТИСТИКИ === */
+    .stats-header {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+      padding: 25px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .stats-header h3 {
+      margin: 0;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .stats-body {
+      padding: 25px;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .stat-item {
+      text-align: center;
+      padding: 20px 15px;
+      background: var(--info-bg);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    .stat-item:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px var(--shadow);
+    }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .stats-categories {
+      background: var(--info-bg);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 25px;
+    }
+
+    .stats-categories h4 {
+      margin: 0 0 15px 0;
+      color: var(--text);
+      font-size: 16px;
+    }
+
+    .category-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .category-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 15px;
+      background: var(--card-bg);
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+    
+    /* стили, при наведении на категорию */
+    .category-item:hover {
+      background-color: var(--primary-light);
+      color: white;
+      transition: background-color 0.2s;
+    }
+
+    .category-name {
+      font-weight: 500;
+      color: var(--text);
+    }
+
+    .category-count {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .stats-actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .stats-btn {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .stats-btn-export {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .stats-btn-export:hover {
+      background: var(--secondary-dark);
+    }
+
+    .stats-btn-import {
+      background: var(--warning);
+      color: white;
+    }
+
+    .stats-btn-import:hover {
+      background: #d97706;
+    }
+
+    .stats-btn-clear {
+      background: var(--danger);
+      color: white;
+    }
+
+    .stats-btn-clear:hover {
+      background: var(--danger-dark);
+    }
+
+    .stats-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      font-size: 22px;
+      cursor: pointer;
+      transition: 0.2s;
+      z-index: 10;
+    }
+
+    .stats-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(90deg);
+    }
+
+    /* === ОКНО ПОДТВЕРЖДЕНИЯ === */
+    .confirm-content {
+      max-width: 550px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .confirm-header {
+      padding: 20px;
+      text-align: center;
+      color: white;
+    }
+
+    .confirm-header.warning {
+      background: linear-gradient(135deg, var(--warning), #d97706);
+    }
+
+    .confirm-header.danger {
+      background: linear-gradient(135deg, var(--danger), var(--danger-dark));
+    }
+
+    .confirm-header h3 {
+      margin: 0;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .confirm-body {
+      padding: 25px;
+    }
+
+    .confirm-warning {
+      background: rgba(239, 68, 68, 0.1);
+      border: 2px solid var(--danger);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .confirm-warning h4 {
+      margin: 0 0 10px 0;
+      color: var(--danger);
+      font-size: 18px;
+    }
+
+    .confirm-warning p {
+      margin: 5px 0;
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+
+    .duplicate-info,
+    .duplicate-preview {
+      background: var(--note-bg);
+      border: 2px solid var(--note-border);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+
+    .duplicate-preview {
+      background: var(--category-bg);
+      border-color: var(--primary);
+    }
+
+    .duplicate-info h4,
+    .duplicate-preview h4 {
+      margin: 0 0 10px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .duplicate-info p,
+    .duplicate-preview p {
+      margin: 5px 0;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .new-name {
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .confirm-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .confirm-btn {
+      padding: 14px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .confirm-btn-primary {
+      background: var(--primary);
+      color: white;
+    }
+
+    .confirm-btn-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .confirm-btn-secondary {
+      background: var(--secondary);
+      color: white;
+    }
+
+    .confirm-btn-secondary:hover {
+      background: var(--secondary-dark);
+    }
+
+    .confirm-btn-cancel {
+      background: var(--bg-secondary);
+      color: var(--text);
+    }
+
+    .confirm-btn-cancel:hover {
+      background: var(--border);
+    }
+
+    .confirm-btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .confirm-btn-danger:hover {
+      background: var(--danger-dark);
+    }
+
+    /* === УВЕДОМЛЕНИЯ === */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--text);
+      color: var(--bg);
+      padding: 15px 25px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      transform: translateY(100px);
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 10001;
+      font-weight: 500;
+    }
+
+    .toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success {
+      background: var(--secondary);
+    }
+
+    .toast.warning {
+      background: var(--warning);
+      color: var(--text);
+    }
+
+    .toast.error {
+      background: var(--danger);
+    }
+
+    /* === АДАПТИВ === */
+    @media (max-width: 900px) {
+      .detail-info {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .detail-actions {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .add-form {
+        grid-template-columns: 1fr;
+      }
+
+      .full-width {
+        grid-column: span 1;
+      }
+
+      .form-buttons {
+        grid-column: span 1;
+      }
+
+      .search-panel {
+        flex-direction: column;
+      }
+
+      .search-wrapper {
+        width: 100%;
+      }
+
+      .sort-wrapper {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .sort-select {
+        flex: 1;
+      }
+
+      .storage-indicator {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .storage-info {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .storage-bar {
+        max-width: 100%;
+      }
+
+      .detail-content {
+        width: 95%;
+        margin: 10px;
+        max-height: 90vh;
+      }
+
+      .detail-image {
+        max-height: 220px;
+      }
+
+      .detail-title {
+        font-size: 22px;
+      }
+
+      .detail-info {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .detail-btn {
+        width: 100%;
+      }
+
+      .modal-buttons {
+        flex-direction: column;
+      }
+
+      .btn-modal {
+        width: 100%;
+      }
+
+      .stats-content {
+        width: 95%;
+        max-height: 90vh;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .stats-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .category-list {
+        grid-template-columns: 1fr;
+      }
+
+      .storage-actions {
+        flex-direction: column;
+      }
+
+      .btn-stats-main {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+
+    /* === ПУСТОЕ СОСТОЯНИЕ === */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-light);
+    }
+
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 20px;
+    }
+
+    .empty-state h3 {
+      margin: 0 0 10px 0;
+      color: var(--text);
+    }
+
+    /* === КАСТОМНЫЙ СКРОЛЛБАР === */
+    .stats-content::-webkit-scrollbar,
+    .detail-content::-webkit-scrollbar,
+    .detail-note-text::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .stats-content::-webkit-scrollbar-track,
+    .detail-content::-webkit-scrollbar-track,
+    .detail-note-text::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+      border-radius: 4px;
+    }
+
+    .stats-content::-webkit-scrollbar-thumb,
+    .detail-content::-webkit-scrollbar-thumb,
+    .detail-note-text::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    .stats-content::-webkit-scrollbar-thumb:hover,
+    .detail-content::-webkit-scrollbar-thumb:hover,
+    .detail-note-text::-webkit-scrollbar-thumb:hover {
+      background: var(--primary-dark);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="app-header">
+      <h1>📦 HomeStock Pro</h1>
+    </div>
+
+    <!-- === ИНДИКАТОР ПАМЯТИ === -->
+    <div class="storage-indicator">
+      <div class="storage-info">
+        <span>💾 Хранилище:</span>
+        <div class="storage-bar">
+          <div class="storage-fill" id="storageFill" style="width: 0%"></div>
+        </div>
+        <span class="storage-text" id="storageText">0 / 5000 КБ</span>
+      </div>
+      <div class="storage-actions">
+        <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Переключить тему">🌙</button>
+        <button class="btn-stats-main" onclick="showStatsModal()">📊 Статистика</button>
+      </div>
+    </div>
+
+    <!-- === ФОРМА ДОБАВЛЕНИЯ === -->
+    <div class="add-form">
+      <input type="hidden" id="editId">
+      <input type="text" id="name" placeholder="Название вещи (напр. Подшипник)" class="full-width">
+
+      <select id="category">
+        <option value="Запчасти">🛠 Запчасти</option>
+        <option value="Электроника">💻 Электроника</option>
+        <option value="Инструменты">🔨 Инструменты</option>
+        <option value="Электрика">⚡ Электрика</option>
+        <option value="Спорт">🚲 Спорт/Вело</option>
+        <option value="Дом">🏠 Дом</option>
+        <option value="Хобби">🧵 Хобби</option>
+        <option value="Краски/химия">🎨 Краски/химия</option>
+        <option value="Другое">📦 Другое</option>
+      </select>
+
+      <input type="number" id="quantity" placeholder="Кол-во" value="1" min="1">
+      <input type="text" id="location" placeholder="Место где лежит? (напр. Шкаф)" class="full-width">
+      <input type="text" id="shelf" placeholder="Расположение (напр. Верхняя полка)" class="full-width">
+      <textarea id="notes" placeholder="📝 Заметка (напр. Докупить подшипник...)" class="full-width"></textarea>
+      <input type="file" id="photo" accept="image/*" class="full-width">
+      <div class="full-width" style="font-size: 12px; color: var(--text-light);">
+        💡 Совет: Фотографии сжимаются автоматически. Максимальный размер до 10 МБ.
+      </div>
+      <!-- +++ Новая кнопка для удаления фото +++ -->
+      <div class="full-width" id="photoDeleteContainer" style="display: none;">
+        <button type="button" class="btn-delete-photo" onclick="removeCurrentPhoto()">🗑️ Удалить текущее фото</button>
+      </div>
+
+      <div class="form-buttons">
+        <button class="btn-add" id="btnAdd" onclick="checkAndAddItem()">➕ Добавить в каталог</button>
+        <button class="btn-cancel" id="btnCancel" onclick="cancelEdit()">✕ Отмена</button>
+      </div>
+    </div>
+
+    <!-- === ПАНЕЛЬ ПОИСКА И СОРТИРОВКИ === -->
+    <div class="search-panel">
+      <div class="search-wrapper">
+        <input type="text" class="search-bar" id="search" placeholder="🔍 Поиск по названию, категории, месту или заметке..." oninput="handleSearchInput()">
+        <button class="search-clear" id="searchClear" onclick="clearSearch()">✕</button>
+      </div>
+      <div class="sort-wrapper">
+        <span class="sort-label">📅 Сортировка:</span>
+        <select class="sort-select" id="sortSelect" onchange="renderItems()">
+          <option value="newest">⬇️ Сначала новые</option>
+          <option value="oldest">⬆️ Сначала старые</option>
+          <option value="name-asc">🔤 По названию (А-Я)</option>
+          <option value="name-desc">🔤 По названию (Я-А)</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- === СЕТКА ТОВАРОВ === -->
+    <div class="items-grid" id="itemsContainer"></div>
+  </div>
+
+  <!-- === МОДАЛЬНОЕ ОКНО QR === -->
+  <div class="modal" id="qrModal">
+    <div class="modal-content">
+      <h3 id="qrTitle">QR Код</h3>
+      <canvas id="qrcode"></canvas>
+      <p class="modal-note">Отсканируйте, чтобы найти вещь</p>
+      <div class="modal-buttons">
+        <button class="btn-modal btn-back" id="btnBackToDetail" onclick="backToDetail()">← Назад к детали</button>
+        <button class="btn-modal btn-close" id="btnCloseQR" onclick="closeQRModal()">Закрыть</button>
+        <button class="btn-modal btn-print" id="btnPrintQR" onclick="printQR()">🖨️ Печать</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- === МОДАЛЬНОЕ ОКНО ДЕТАЛЕЙ === -->
+  <div class="detail-modal" id="detailModal">
+    <div class="detail-content">
+      <button class="detail-close" onclick="closeDetailModal()">×</button>
+      <img id="detailImage" class="detail-image" src="" alt="" onclick="openZoomModalFromDetail()">
+      <div class="detail-body">
+        <h2 id="detailTitle" class="detail-title"></h2>
+        <span id="detailCategory" class="detail-cat"></span>
+
+        <div class="detail-info">
+          <div class="detail-info-item">
+            <div class="detail-info-label">📍 Место хранения</div>
+            <div id="detailLocation" class="detail-info-value"></div>
+          </div>
+          <div class="detail-info-item">
+            <div class="detail-info-label">📦 Расположение</div>
+            <div id="detailShelf" class="detail-info-value"></div>
+          </div>
+          <div class="detail-info-item">
+            <div class="detail-info-label">🔢 Количество</div>
+            <div id="detailQuantity" class="detail-info-value"></div>
+          </div>
+        </div>
+
+        <div class="detail-note-section" id="detailNoteSection" style="display: none;">
+          <h4>📝 Заметка</h4>
+          <div id="detailNoteText" class="detail-note-text"></div>
+        </div>
+
+        <div class="detail-actions">
+          <button class="detail-btn detail-btn-edit" onclick="editFromDetail()">✏️ Изменить</button>
+          <button class="detail-btn detail-btn-qr" onclick="showQRFromDetail()">📱 Показать QR</button>
+          <button class="detail-btn detail-btn-delete" onclick="deleteFromDetail()">🗑️ Удалить</button>
+        </div>
+
+        <div id="detailCreated" class="detail-created"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- === МОДАЛЬНОЕ ОКНО СТАТИСТИКИ === -->
+  <div class="stats-modal" id="statsModal">
+    <div class="stats-content">
+      <button class="stats-close" onclick="closeStatsModal()">×</button>
+      <div class="stats-header">
+        <h3>📊 Статистика и управление</h3>
+      </div>
+      <div class="stats-body">
+        <div class="stats-grid">
+          <div class="stat-item">
+            <div class="stat-value" id="statTotal">0</div>
+            <div class="stat-label">Всего вещей</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="statCategories">0</div>
+            <div class="stat-label">Категорий</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="statWithPhotos">0</div>
+            <div class="stat-label">С фото</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-value" id="statStorage">0%</div>
+            <div class="stat-label">Занято памяти</div>
+          </div>
+        </div>
+
+        <div class="stats-categories">
+          <h4>📁 Распределение по категориям</h4>
+          <div class="category-list" id="categoryList"></div>
+        </div>
+
+        <div class="stats-actions">
+          <button class="stats-btn stats-btn-export" onclick="exportData()">📥 Скачать базу (JSON)</button>
+          <button class="stats-btn stats-btn-import" onclick="document.getElementById('importFile').click()">📤 Загрузить базу</button>
+          <button class="stats-btn stats-btn-clear" onclick="showClearConfirm()">🗑️ Очистить базу</button>
+        </div>
+
+        <input type="file" id="importFile" accept=".json" onchange="importData(this)" style="display:none">
+      </div>
+    </div>
+  </div>
+
+  <!-- === МОДАЛЬНОЕ ОКНО УВЕЛИЧЕНИЯ ФОТО === -->
+  <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal(event)">
+    <div class="zoom-content">
+      <button class="zoom-close" onclick="closeZoomModal(event)">×</button>
+      <img id="zoomImage" class="zoom-image" src="" alt="">
+      <div class="zoom-hint">Кликните или нажмите Escape для закрытия</div>
+    </div>
+  </div>
+
+  <!-- === ОКНО ПОДТВЕРЖДЕНИЯ ДУБЛИКАТА === -->
+  <div class="confirm-modal" id="duplicateModal">
+    <div class="confirm-content">
+      <div class="confirm-header warning">
+        <h3>⚠️ Возможный дубликат</h3>
+      </div>
+      <div class="confirm-body">
+        <div class="duplicate-info">
+          <h4>Найдено похожее:</h4>
+          <p><strong>📦 Название:</strong> <span id="dupName"></span></p>
+          <p><strong>📍 Место:</strong> <span id="dupLocation"></span></p>
+          <p><strong>📦 Полка:</strong> <span id="dupShelf"></span></p>
+          <p><strong>🔢 Текущее кол-во:</strong> <span id="dupQuantity"></span></p>
+          <p id="dupNotesRow" style="display: none;"><strong>📝 Заметка:</strong> <span id="dupNotes"></span></p>
+        </div>
+
+        <div class="duplicate-preview" id="duplicatePreview" style="display: none;">
+          <h4>📌 Будет создано:</h4>
+          <p><strong>📦 Название:</strong> <span id="newName" class="new-name"></span></p>
+          <p><strong>🔢 Количество:</strong> <span id="newQuantity"></span></p>
+        </div>
+
+        <div class="confirm-actions">
+          <button class="confirm-btn confirm-btn-secondary" onclick="addQuantityToDuplicate()">
+            ➕ Добавить к количеству (+<span id="addQty"></span>)
+          </button>
+          <button class="confirm-btn confirm-btn-primary" onclick="addAsCopy()">
+            📌 Создать копию <span id="copyLabel"></span>
+          </button>
+          <button class="confirm-btn confirm-btn-cancel" onclick="cancelAddDuplicate()">
+            ✕ Отмена
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- === ОКНО ПОДТВЕРЖДЕНИЯ ОЧИСТКИ БАЗЫ === -->
+  <div class="confirm-modal" id="clearConfirmModal">
+    <div class="confirm-content">
+      <div class="confirm-header danger">
+        <h3>🗑️ Очистка базы данных</h3>
+      </div>
+      <div class="confirm-body">
+        <div class="confirm-warning">
+          <h4>⚠️ Внимание!</h4>
+          <p>Это действие <strong>необратимо</strong></p>
+          <p>Все вещи будут удалены без возможности восстановления</p>
+        </div>
+
+        <div class="stats-panel" style="background: var(--info-bg); border-radius: 8px; padding: 15px; margin-bottom: 20px;">
+          <p style="margin: 0; color: var(--text); font-size: 15px;">Сейчас в базе: <strong style="color: var(--danger); font-size: 18px;" id="clearItemCount">0</strong> вещей</p>
+        </div>
+
+        <p style="color: var(--text-light); font-size: 14px; margin-bottom: 20px;">
+          💡 Совет: Перед очисткой рекомендуется <strong>скачать резервную копию</strong>
+        </p>
+
+        <div class="confirm-actions">
+          <button class="confirm-btn confirm-btn-danger" onclick="clearDatabase()">🗑️ Да, очистить всё</button>
+          <button class="confirm-btn confirm-btn-secondary" onclick="exportBeforeClear()">📥 Сначала скачать копию</button>
+          <button class="confirm-btn confirm-btn-cancel" onclick="closeClearConfirm()">✕ Отмена</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- === УВЕДОМЛЕНИЯ === -->
+  <div class="toast" id="toast"></div>
+
+  <script>
     /**
      * HomeStock Pro - Версия с QR-библиотекой qrcode (canvas)
      * ================= НАСТРОЙКА КАЧЕСТВА =================
@@ -330,10 +2096,11 @@
       const categories = {};
       let withPhotos = 0;
 
-      state.items.forEach(item => {
-        categories[item.category] = (categories[item.category] || 0) + 1;
-        if (item.photo) withPhotos++;
-      });
+        state.items.forEach(item => {
+          categories[item.category] = (categories[item.category] || 0) + 1;
+          // +++ ИСПРАВЛЕНО: проверяем photoId вместо photo +++
+        if (item.photoId) withPhotos++;
+        });
 
       document.getElementById('statCategories').textContent = Object.keys(categories).length;
       document.getElementById('statWithPhotos').textContent = withPhotos;
@@ -344,7 +2111,7 @@
       const percent = Math.min((usedKB / maxKB) * 100, 100).toFixed(1);
       document.getElementById('statStorage').textContent = `${percent}%`;
 
-      // +++ Добавляем обработчики кликов для статистических показателей +++
+      // Добавляем обработчики кликов для статистических показателей
       document.getElementById('statTotal').parentElement.onclick = filterAllItems;
       document.getElementById('statTotal').parentElement.style.cursor = 'pointer';
   
@@ -356,7 +2123,6 @@
   
       document.getElementById('statStorage').parentElement.onclick = showStorageDetails;
       document.getElementById('statStorage').parentElement.style.cursor = 'pointer';
-      // ============================================================
 
       const categoryList = document.getElementById('categoryList');
       categoryList.innerHTML = '';
@@ -579,15 +2345,25 @@
 
     async function processNewItem(name, category, quantity, location, shelf, notes, photoFile) {
       try {
-        let photoData = null;
+        let photoId = null;
+    
+        // Если есть фото, сохраняем его отдельно
         if (photoFile) {
           await validatePhotoSize(photoFile);
           showToast('⏳ Сжатие фото...', 'info');
-          photoData = await compressImage(photoFile);
+          const photoData = await compressImage(photoFile);
+      
+          // Генерируем уникальный ID для фото
+          photoId = 'photo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      
+          // Сохраняем фото в отдельный ключ localStorage
+          localStorage.setItem(photoId, photoData);
+      
           const sizeKB = (new Blob([photoData]).size / 1024).toFixed(1);
           showToast(`✅ Фото сжато до ${sizeKB} КБ`, 'success');
         }
 
+        // В предмете храним только ссылку на фото (photoId)
         const newItem = {
           id: Date.now(),
           name,
@@ -596,18 +2372,17 @@
           location,
           shelf: shelf || '',
           notes,
-          photo: photoData,
+          photoId: photoId, // вместо photo: photoData
           createdAt: new Date().toISOString()
         };
 
         state.items.push(newItem);
-        saveItems();
+        saveItems(); // сохраняем только текстовые данные
     
-        // +++ Очищаем поиск перед рендерингом +++
+        // Очищаем поиск перед рендерингом
         const searchInput = document.getElementById('search');
         searchInput.value = '';
         updateSearchClearButton();
-        // ====================================
     
         renderItems();
         clearForm();
@@ -698,41 +2473,107 @@
       }
       // ============================
 
-      const processItem = async (photoData) => {
-        const itemIndex = state.items.findIndex(item => item.id == editId);
-        if (itemIndex === -1) return;
+      // Находим редактируемый предмет
+      const itemIndex = state.items.findIndex(item => item.id == editId);
+      if (itemIndex === -1) return;
+  
+      const existingItem = state.items[itemIndex];
 
-        const existingItem = state.items[itemIndex];
-        existingItem.name = name;
-        existingItem.category = category;
-        existingItem.quantity = quantityNum;   // используем число
-        existingItem.location = location;
-        existingItem.shelf = shelf;
-        existingItem.notes = notes;
-        if (photoData) existingItem.photo = photoData;
+      // Обрабатываем новое фото, если оно загружено
+      let newPhotoId = existingItem.photoId; // по умолчанию оставляем старое фото
 
-        saveItems();
-        renderItems();
-        cancelEdit();
-
-        if (state.currentDetailId == editId) {
-          openDetailModal(editId);
+      if (photoInput.files && photoInput.files[0]) {
+        try {
+          // Проверяем размер
+          await validatePhotoSize(photoInput.files[0]);
+          showToast('⏳ Сжатие фото...', 'info');
+      
+          // Сжимаем новое фото
+          const photoData = await compressImage(photoInput.files[0]);
+      
+          // Генерируем новый ID для фото
+          newPhotoId = 'photo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      
+          // Сохраняем новое фото в отдельный ключ
+          localStorage.setItem(newPhotoId, photoData);
+      
+          // Удаляем старое фото, если оно было
+          if (existingItem.photoId) {
+            localStorage.removeItem(existingItem.photoId);
+          }
+      
+          const sizeKB = (new Blob([photoData]).size / 1024).toFixed(1);
+          showToast(`✅ Новое фото сжато до ${sizeKB} КБ`, 'success');
+      
+        } catch (error) {
+          showToast('❌ Ошибка при обработке фото: ' + error.message, 'error');
+          return;
         }
+      }
 
-        showToast('✅ Изменения сохранены', 'success');
+      // Обновляем данные предмета
+      const updatedItem = {
+        ...existingItem,
+        name: name,
+        category: category,
+        quantity: quantityNum,
+        location: location,
+        shelf: shelf,
+        notes: notes,
+        photoId: newPhotoId, // может быть null, если фото удалили
       };
 
-      try {
-        if (photoInput.files && photoInput.files[0]) {
-          await validatePhotoSize(photoInput.files[0]);
-          const photoData = await compressImage(photoInput.files[0]);
-          await processItem(photoData);
-        } else {
-          await processItem(null);
-        }
-      } catch (error) {
-        showToast('❌ Ошибка: ' + error.message, 'error');
+      // Заменяем старый предмет обновлённым
+      state.items[itemIndex] = updatedItem;
+  
+      // Сохраняем изменения
+      saveItems();
+  
+      // Очищаем поиск перед рендерингом
+      const searchInput = document.getElementById('search');
+      searchInput.value = '';
+      updateSearchClearButton();
+  
+      // Обновляем отображение
+      renderItems();
+      cancelEdit();
+
+      // Если открыто детальное окно с этим предметом, обновляем его
+      if (state.currentDetailId == editId) {
+        openDetailModal(editId);
       }
+
+      showToast('✅ Изменения сохранены', 'success');
+    }
+    
+    function removeCurrentPhoto() {
+      const editId = document.getElementById('editId').value;
+      if (!editId) return;
+  
+      const item = state.items.find(i => i.id == editId);
+      if (!item || !item.photoId) return;
+  
+      // Удаляем фото из хранилища
+      localStorage.removeItem(item.photoId);
+  
+      // Обновляем объект предмета (убираем photoId)
+      item.photoId = null;
+  
+      // Сохраняем изменения
+      saveItems();
+  
+      // Обновляем отображение
+      renderItems();
+  
+      // Скрываем кнопку удаления
+      document.getElementById('photoDeleteContainer').style.display = 'none';
+  
+      // Если открыто детальное окно, обновляем его
+      if (state.currentDetailId == editId) {
+        openDetailModal(editId);
+      }
+  
+      showToast('✅ Фото удалено', 'success');
     }
 
     function sortItems(itemsToSort) {
@@ -777,17 +2618,17 @@
       const search = document.getElementById('search').value.toLowerCase();
 
       let filtered = state.items.filter(item => {
-      // Если поиск равен '📷', фильтруем по наличию фото
-      if (search === '📷') {
-        return item.photo; // true если есть фото
-      }
+        // Если поиск равен '📷', фильтруем по наличию фото
+        if (search === '📷') {
+          return item.photoId; // true если есть photoId
+        }
     
-      // Иначе обычный поиск
-      return item.name.toLowerCase().includes(search) ||
-           item.category.toLowerCase().includes(search) ||
-           item.location.toLowerCase().includes(search) ||
-           (item.shelf && item.shelf.toLowerCase().includes(search)) ||
-           (item.notes && item.notes.toLowerCase().includes(search));
+        // Иначе обычный поиск
+        return item.name.toLowerCase().includes(search) ||
+               item.category.toLowerCase().includes(search) ||
+               item.location.toLowerCase().includes(search) ||
+               (item.shelf && item.shelf.toLowerCase().includes(search)) ||
+               (item.notes && item.notes.toLowerCase().includes(search));
       });
 
       filtered = sortItems(filtered);
@@ -829,9 +2670,14 @@
         if (!e.target.closest('button')) openDetailModal(item.id);
       };
 
-      const imgDisplay = item.photo
-        ? `<img src="${item.photo}" class="item-img" alt="${escapeHtml(item.name)}" loading="lazy">`
-        : `<div class="item-img">📷</div>`;
+      // Получаем фото по photoId, если оно есть
+      let imgDisplay = '<div class="item-img">📷</div>';
+      if (item.photoId) {
+        const photoData = localStorage.getItem(item.photoId);
+        if (photoData) {
+          imgDisplay = `<img src="${photoData}" class="item-img" alt="${escapeHtml(item.name)}" loading="lazy">`;
+        }
+      }
 
       const noteDisplay = item.notes && item.notes.trim()
         ? `<div class="item-note">📝 ${escapeHtml(item.notes)}</div>`
@@ -985,6 +2831,15 @@
       document.getElementById('notes').value = item.notes || '';
       document.getElementById('photo').value = '';
 
+      // +++ Показываем кнопку удаления фото, если у предмета есть фото +++
+      const photoDeleteContainer = document.getElementById('photoDeleteContainer');
+      if (item.photoId) {
+        photoDeleteContainer.style.display = 'block';
+      } else {
+        photoDeleteContainer.style.display = 'none';
+      }
+      // ============================================================
+
       document.getElementById('btnAdd').textContent = '💾 Сохранить';
       document.getElementById('btnAdd').style.backgroundColor = 'var(--secondary)';
       document.getElementById('btnCancel').style.display = 'block';
@@ -998,11 +2853,21 @@
       document.getElementById('btnAdd').textContent = '➕ Добавить в каталог';
       document.getElementById('btnAdd').style.backgroundColor = 'var(--primary)';
       document.getElementById('btnCancel').style.display = 'none';
+      // +++ Скрываем кнопку удаления фото +++
+      document.getElementById('photoDeleteContainer').style.display = 'none';
+      // ======================================
       state.isEditing = false;
     }
 
     function deleteItem(id) {
       if (confirm('Удалить эту вещь?')) {
+        const item = state.items.find(i => i.id === id);
+    
+        // Удаляем фото из отдельного хранилища, если оно есть
+        if (item && item.photoId) {
+          localStorage.removeItem(item.photoId);
+        }
+    
         state.items = state.items.filter(item => item.id !== id);
         saveItems();
         renderItems();
@@ -1022,10 +2887,16 @@
       const modal = document.getElementById('detailModal');
 
       const detailImage = document.getElementById('detailImage');
-      if (item.photo) {
-        detailImage.src = item.photo;
-        detailImage.style.display = 'block';
-        detailImage.onclick = () => openZoomModal(item.photo);
+      if (item.photoId) {
+        const photoData = localStorage.getItem(item.photoId);
+        if (photoData) {
+          detailImage.src = photoData;
+          detailImage.style.display = 'block';
+          detailImage.onclick = () => openZoomModal(photoData);
+        } else {
+          detailImage.style.display = 'none';
+          detailImage.onclick = null;
+        }
       } else {
         detailImage.style.display = 'none';
         detailImage.onclick = null;
@@ -1253,3 +3124,5 @@
       }
     });
   </script>
+</body>
+</html>
