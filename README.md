@@ -2,7 +2,7 @@
 Удобное офлайн‑приложение для учёта домашних вещей
 
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
-![License](https://img.shields.io/badge/License-MIT-blue)
+![License](https://img.shields.io/badge/License-GPL--3.0-blue.svg)
 ![Offline](https://img.shields.io/badge/Offline-100%25-success)
 ![Tech](https://img.shields.io/badge/Tech-HTML%2C%20CSS%2C%20JS-orange)
 
