@@ -367,11 +367,45 @@
       border-color: var(--primary);
     }
 
-    /* === СЕТКА ТОВАРОВ === */
+    /* === СТАТИСТИКА ЗАГРУЗКИ === */
+    .load-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 10px 0;
+      padding: 10px;
+      background: var(--info-bg);
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .load-more-btn {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+
+    .load-more-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .load-more-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* === СЕТКА ВЕЩЕЙ === */
     .items-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
       gap: 20px;
+      min-height: 200px;
     }
 
     .item-card {
@@ -384,6 +418,16 @@
       cursor: pointer;
       display: flex;
       flex-direction: column;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.3s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .item-card:hover {
@@ -464,7 +508,6 @@
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      /* дополнительный перенос для надёжности */
       word-break: break-word;
     }
 
@@ -527,11 +570,11 @@
       background-color: var(--danger);
       color: white;
       border: none;
-      padding: 8px 16px;
+      padding: 10px 16px;
       border-radius: 6px;
       cursor: pointer;
       font-weight: 600;
-      font-size: 13px;
+      font-size: 14px;
       transition: all 0.2s;
       width: 100%;
       margin-top: 5px;
@@ -728,13 +771,9 @@
       color: var(--primary);
       font-size: 22px;
       overflow-wrap: break-word;
-      /* перенос длинных слов */
       word-wrap: break-word;
-      /* для старых браузеров */
       max-width: 100%;
-      /* не выходит за границы */
       padding: 0 10px;
-      /* небольшие отступы по бокам (опционально) */
     }
 
     /* === СТИЛИ ДЛЯ CANVAS ВНУТРИ #QRCODE === */
@@ -750,7 +789,6 @@
       padding: 10px;
       border-radius: 8px;
       background: white;
-      /* фиксированный белый фон для контраста в любой теме */
     }
 
     .modal-note {
@@ -861,7 +899,7 @@
       color: var(--category-text);
       padding: 5px 12px;
       border-radius: 8px;
-      font-size: 13px;
+      font-size: 15px;
       font-weight: 600;
       margin-bottom: 15px;
     }
@@ -875,7 +913,6 @@
       max-width: 100%;
     }
 
-    /* Стили для заметки (включая перенос) */
     .detail-note-text {
       color: var(--note-text);
       font-size: 14px;
@@ -1082,7 +1119,6 @@
       border: 1px solid var(--border);
     }
     
-    /* стили, при наведении на категорию */
     .category-item:hover {
       background-color: var(--primary-light);
       color: white;
@@ -1556,7 +1592,6 @@
       <div class="full-width" style="font-size: 12px; color: var(--text-light);">
         💡 Совет: Фотографии сжимаются автоматически. Максимальный размер до 10 МБ.
       </div>
-      <!-- +++ Новая кнопка для удаления фото +++ -->
       <div class="full-width" id="photoDeleteContainer" style="display: none;">
         <button type="button" class="btn-delete-photo" onclick="removeCurrentPhoto()">🗑️ Удалить текущее фото</button>
       </div>
@@ -1575,7 +1610,7 @@
       </div>
       <div class="sort-wrapper">
         <span class="sort-label">📅 Сортировка:</span>
-        <select class="sort-select" id="sortSelect" onchange="renderItems()">
+        <select class="sort-select" id="sortSelect" onchange="handleSortChange()">
           <option value="newest">⬇️ Сначала новые</option>
           <option value="oldest">⬆️ Сначала старые</option>
           <option value="name-asc">🔤 По названию (А-Я)</option>
@@ -1584,11 +1619,17 @@
       </div>
     </div>
 
-    <!-- === СЕТКА ТОВАРОВ === -->
+    <!-- === СТАТИСТИКА ЗАГРУЗКИ === -->
+    <div class="load-stats" id="loadStats">
+      <span id="itemsCount">0</span> из <span id="totalItemsCount">0</span> вещей
+      <button class="load-more-btn" id="loadMoreBtn" onclick="loadMoreItems()">Загрузить ещё 20</button>
+    </div>
+
+    <!-- === СЕТКА ВЕЩЕЙ === -->
     <div class="items-grid" id="itemsContainer"></div>
   </div>
 
-  <!-- === МОДАЛЬНОЕ ОКНО QR === -->
+  <!-- === МОДАЛЬНЫЕ ОКНА === -->
   <div class="modal" id="qrModal">
     <div class="modal-content">
       <h3 id="qrTitle">QR Код</h3>
@@ -1602,7 +1643,6 @@
     </div>
   </div>
 
-  <!-- === МОДАЛЬНОЕ ОКНО ДЕТАЛЕЙ === -->
   <div class="detail-modal" id="detailModal">
     <div class="detail-content">
       <button class="detail-close" onclick="closeDetailModal()">×</button>
@@ -1642,7 +1682,6 @@
     </div>
   </div>
 
-  <!-- === МОДАЛЬНОЕ ОКНО СТАТИСТИКИ === -->
   <div class="stats-modal" id="statsModal">
     <div class="stats-content">
       <button class="stats-close" onclick="closeStatsModal()">×</button>
@@ -1685,7 +1724,6 @@
     </div>
   </div>
 
-  <!-- === МОДАЛЬНОЕ ОКНО УВЕЛИЧЕНИЯ ФОТО === -->
   <div class="zoom-modal" id="zoomModal" onclick="closeZoomModal(event)">
     <div class="zoom-content">
       <button class="zoom-close" onclick="closeZoomModal(event)">×</button>
@@ -1694,7 +1732,6 @@
     </div>
   </div>
 
-  <!-- === ОКНО ПОДТВЕРЖДЕНИЯ ДУБЛИКАТА === -->
   <div class="confirm-modal" id="duplicateModal">
     <div class="confirm-content">
       <div class="confirm-header warning">
@@ -1731,7 +1768,6 @@
     </div>
   </div>
 
-  <!-- === ОКНО ПОДТВЕРЖДЕНИЯ ОЧИСТКИ БАЗЫ === -->
   <div class="confirm-modal" id="clearConfirmModal">
     <div class="confirm-content">
       <div class="confirm-header danger">
@@ -1765,24 +1801,6 @@
   <div class="toast" id="toast"></div>
 
   <script>
-    /**
-     * HomeStock Pro - Версия с QR-библиотекой qrcode (canvas)
-     * ================= НАСТРОЙКА КАЧЕСТВА =================
-     * для качества 70% размер фото ~ 100–150 КБ
-     *   IMAGE_MAX_WIDTH: 800,
-     *   IMAGE_MAX_HEIGHT: 600,
-     *   IMAGE_QUALITY: 0.7,
-     *
-     * для качества ~ 60% размер фото ~ 60–90 КБ
-     *   IMAGE_MAX_WIDTH: 600,
-     *   IMAGE_MAX_HEIGHT: 450,
-     *   IMAGE_QUALITY: 0.6,
-     *
-     * для качества ~ 50% размер фото ~ 35–60 КБ
-     *   IMAGE_MAX_WIDTH: 500,
-     *   IMAGE_MAX_HEIGHT: 375,
-     *   IMAGE_QUALITY: 0.5,
-     */
     const CONFIG = {
       STORAGE_KEY: 'homeStockItems',
       THEME_KEY: 'homeStockTheme',
@@ -1791,11 +1809,13 @@
       IMAGE_MAX_HEIGHT: 375,
       IMAGE_QUALITY: 0.5,
       DEBOUNCE_DELAY: 300,
-      MAX_QUANTITY: 1000000, // Максимальное количество вещей
-      MAX_PHOTO_SIZE_MB: 10  // Максимальный размер загружаемого фото до сжатия
+      SORT_DEBOUNCE_DELAY: 300,
+      MAX_QUANTITY: 1000000,
+      MAX_PHOTO_SIZE_MB: 10,
+      ITEMS_PER_PAGE: 20,
+      STORAGE_WARNING_THRESHOLD: 0.9 // 90% лимита
     };
     
-    /*== ЭМОДЗИ ДЛЯ КАТЕГОРИЙ ==*/
     const CATEGORY_EMOJI = {
       'Запчасти': '🛠',
       'Электроника': '💻',
@@ -1833,30 +1853,80 @@
       'Косметика/гигиена': '🧴'
     };
 
+    function getCategoryWithEmoji(category) {
+      const emoji = CATEGORY_EMOJI[category] || '📦';
+      return `${emoji} ${category}`;
+    }
+
     const state = {
       items: [],
+      filteredItems: [],
+      displayedItems: [],
+      currentPage: 1,
       isEditing: false,
       currentDetailId: null,
       qrOpenedFromDetail: false,
-      pendingItem: null,      // временные данные для дубликата: { name, category, quantity, location, shelf, notes, photoFile }
-      duplicateItemId: null,  // id найденного дубликата
+      pendingItem: null,
+      duplicateItemId: null,
       copyNumber: 1,
       searchDebounce: null,
+      sortDebounce: null,
       currentQRId: null,
-      currentTheme: 'light'
+      currentTheme: 'light',
+      isLoadingMore: false
     };
+
+    let scrollTimeout;
+
+    // === ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ===
+    function escapeHtml(text) {
+      if (!text) return '';
+      if (typeof text !== 'string') {
+        text = String(text);
+      }
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function decodeHtmlEntities(text) {
+      if (!text) return '';
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = text;
+      return textarea.value;
+    }
+
+    function getItemDate(item) {
+      if (!item || !item.createdAt) return 0;
+      try {
+        const date = new Date(item.createdAt);
+        return isNaN(date.getTime()) ? 0 : date.getTime();
+      } catch {
+        return 0;
+      }
+    }
+
+    // Точная проверка места в хранилище
+    function checkStorageSpace(additionalBytes) {
+      try {
+        const currentData = localStorage.getItem(CONFIG.STORAGE_KEY) || '';
+        const currentSize = new Blob([currentData]).size;
+        const maxSize = CONFIG.MAX_STORAGE_MB * 1024 * 1024;
+        const threshold = maxSize * CONFIG.STORAGE_WARNING_THRESHOLD;
+        
+        if (currentSize + additionalBytes > threshold) {
+          return confirm('⚠️ Хранилище почти заполнено. Всё равно продолжить?');
+        }
+        return true;
+      } catch {
+        return true;
+      }
+    }
 
     // === УПРАВЛЕНИЕ ТЕМОЙ ===
     function initTheme() {
       const savedTheme = localStorage.getItem(CONFIG.THEME_KEY);
-
-      if (savedTheme) {
-        state.currentTheme = savedTheme;
-      } else {
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        state.currentTheme = prefersDark ? 'dark' : 'light';
-      }
-
+      state.currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       applyTheme(state.currentTheme);
       updateThemeButton();
 
@@ -1884,7 +1954,6 @@
       updateThemeButton();
       showToast(`🌓 Тема: ${state.currentTheme === 'dark' ? 'Тёмная' : 'Светлая'}`, 'info');
 
-      // Если открыто модальное окно QR, перерисовываем с новыми цветами
       const qrModal = document.getElementById('qrModal');
       if (qrModal.style.display === 'flex' && state.currentQRId) {
         showQR(state.currentQRId, state.qrOpenedFromDetail);
@@ -1904,14 +1973,21 @@
       initTheme();
       loadItems();
       updateStorageIndicator();
-      // Проверка загрузки библиотеки QR необязательна, она будет в showQR
+      window.addEventListener('scroll', handleInfiniteScroll);
+    });
+
+    window.addEventListener('beforeunload', () => {
+      window.removeEventListener('scroll', handleInfiniteScroll);
+      if (scrollTimeout) {
+        window.cancelAnimationFrame(scrollTimeout);
+      }
     });
 
     function loadItems() {
       try {
         const data = localStorage.getItem(CONFIG.STORAGE_KEY);
         state.items = data ? JSON.parse(data) : [];
-        renderItems();
+        resetPagination();
         updateStorageIndicator();
       } catch (error) {
         console.error('Ошибка загрузки:', error);
@@ -1926,7 +2002,11 @@
         updateStorageIndicator();
       } catch (error) {
         console.error('Ошибка сохранения:', error);
-        showToast('❌ Превышен лимит хранилища!', 'error');
+        if (error.name === 'QuotaExceededError') {
+          showToast('❌ Превышен лимит хранилища! Удалите некоторые фото', 'error');
+        } else {
+          showToast('❌ Ошибка сохранения', 'error');
+        }
         throw error;
       }
     }
@@ -1947,7 +2027,6 @@
         fill.className = 'storage-fill';
         if (percent > 80) fill.classList.add('danger');
         else if (percent > 60) fill.classList.add('warning');
-
       } catch (error) {
         console.error('Ошибка индикатора:', error);
       }
@@ -1966,6 +2045,7 @@
       });
     }
 
+    // Сжатие фото без сохранения, возвращает dataURL
     function compressImage(file, maxWidth = CONFIG.IMAGE_MAX_WIDTH, maxHeight = CONFIG.IMAGE_MAX_HEIGHT) {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -1998,13 +2078,114 @@
       });
     }
 
-    // === ПОИСК ===
+    // === ПАГИНАЦИЯ ===
+    function resetPagination() {
+      state.currentPage = 1;
+      updateFilteredItems();
+    }
+
+    function updateFilteredItems() {
+      const searchRaw = document.getElementById('search').value;
+      const search = searchRaw.toLowerCase();
+      const sortType = document.getElementById('sortSelect').value;
+
+      state.filteredItems = state.items.filter(item => {
+        // Точное сравнение для эмодзи
+        if (searchRaw === '📷') {
+          return !!item.photoId;
+        }
+        return item.name.toLowerCase().includes(search) ||
+               item.category.toLowerCase().includes(search) ||
+               item.location.toLowerCase().includes(search) ||
+               (item.shelf && item.shelf.toLowerCase().includes(search)) ||
+               (item.notes && item.notes.toLowerCase().includes(search));
+      });
+
+      switch (sortType) {
+        case 'newest':
+          state.filteredItems.sort((a, b) => getItemDate(b) - getItemDate(a));
+          break;
+        case 'oldest':
+          state.filteredItems.sort((a, b) => getItemDate(a) - getItemDate(b));
+          break;
+        case 'name-asc':
+          state.filteredItems.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
+          break;
+        case 'name-desc':
+          state.filteredItems.sort((a, b) => b.name.localeCompare(a.name, 'ru'));
+          break;
+      }
+
+      updateDisplayedItems();
+    }
+
+    function updateDisplayedItems() {
+      const start = 0;
+      const end = state.currentPage * CONFIG.ITEMS_PER_PAGE;
+      state.displayedItems = state.filteredItems.slice(start, end);
+      renderItems();
+      updateLoadStats();
+    }
+
+    async function loadMoreItems() {
+      if (state.isLoadingMore || !hasMoreItems()) return;
+      
+      state.isLoadingMore = true;
+      state.currentPage++;
+      updateDisplayedItems();
+      state.isLoadingMore = false;
+    }
+
+    function handleInfiniteScroll() {
+      if (scrollTimeout) {
+        window.cancelAnimationFrame(scrollTimeout);
+      }
+      
+      scrollTimeout = window.requestAnimationFrame(() => {
+        const scrollPosition = window.innerHeight + window.scrollY;
+        const threshold = document.documentElement.scrollHeight - 1000;
+        
+        if (scrollPosition >= threshold && hasMoreItems() && !state.isLoadingMore) {
+          loadMoreItems();
+        }
+      });
+    }
+
+    function hasMoreItems() {
+      return state.displayedItems.length < state.filteredItems.length;
+    }
+
+    function updateLoadStats() {
+      const itemsCount = document.getElementById('itemsCount');
+      const totalItemsCount = document.getElementById('totalItemsCount');
+      const loadMoreBtn = document.getElementById('loadMoreBtn');
+
+      itemsCount.textContent = state.displayedItems.length;
+      totalItemsCount.textContent = state.filteredItems.length;
+      
+      if (hasMoreItems()) {
+        loadMoreBtn.disabled = false;
+        loadMoreBtn.textContent = `Загрузить ещё ${Math.min(CONFIG.ITEMS_PER_PAGE, state.filteredItems.length - state.displayedItems.length)}`;
+      } else {
+        loadMoreBtn.disabled = true;
+        loadMoreBtn.textContent = 'Все вещи загружены';
+      }
+    }
+
+    // === ПОИСК И СОРТИРОВКА ===
     function handleSearchInput() {
       clearTimeout(state.searchDebounce);
       state.searchDebounce = setTimeout(() => {
-        renderItems();
+        resetPagination();
         updateSearchClearButton();
       }, CONFIG.DEBOUNCE_DELAY);
+    }
+
+    function handleSortChange() {
+      clearTimeout(state.sortDebounce);
+      state.sortDebounce = setTimeout(() => {
+        resetPagination();
+      }, CONFIG.SORT_DEBOUNCE_DELAY);
     }
 
     function updateSearchClearButton() {
@@ -2016,32 +2197,32 @@
     function clearSearch() {
       document.getElementById('search').value = '';
       updateSearchClearButton();
-      renderItems();
+      resetPagination();
     }
-    
+
     // === ФУНКЦИИ ДЛЯ СТАТИСТИКИ ===
     function filterAllItems() {
       const searchInput = document.getElementById('search');
-      searchInput.value = ''; // очищаем поиск
+      searchInput.value = '';
       updateSearchClearButton();
-      renderItems();
+      resetPagination();
       closeStatsModal();
     }
 
     function showAllCategories() {
       const searchInput = document.getElementById('search');
-      searchInput.value = ''; // очищаем поиск
+      searchInput.value = '';
       updateSearchClearButton();
-      renderItems(); // обновляем отображение (показываем все товары)
+      resetPagination();
       closeStatsModal();
       showToast('Все категории отображаются выше', 'info');
     }
 
     function filterWithPhotos() {
       const searchInput = document.getElementById('search');
-      searchInput.value = '📷'; // специальный маркер
+      searchInput.value = '📷';
       updateSearchClearButton();
-      renderItems();
+      resetPagination();
       closeStatsModal();
     }
 
@@ -2054,20 +2235,12 @@
       showToast(`💾 Использовано: ${usedKB} КБ из ${maxKB} КБ (${percent}%)`, 'info', 5000);
       closeStatsModal();
     }
-    // ==================================
     
     function filterByCategory(category) {
-    // Устанавливаем значение поиска
       const searchInput = document.getElementById('search');
-      searchInput.value = category;
-  
-      // Обновляем кнопку очистки поиска
+      searchInput.value = decodeHtmlEntities(category);
       updateSearchClearButton();
-  
-      // Фильтруем и перерисовываем
-      renderItems();
-  
-      // Закрываем окно статистики (опционально)
+      resetPagination();
       closeStatsModal();
     }
 
@@ -2096,11 +2269,10 @@
       const categories = {};
       let withPhotos = 0;
 
-        state.items.forEach(item => {
-          categories[item.category] = (categories[item.category] || 0) + 1;
-          // +++ ИСПРАВЛЕНО: проверяем photoId вместо photo +++
+      state.items.forEach(item => {
+        categories[item.category] = (categories[item.category] || 0) + 1;
         if (item.photoId) withPhotos++;
-        });
+      });
 
       document.getElementById('statCategories').textContent = Object.keys(categories).length;
       document.getElementById('statWithPhotos').textContent = withPhotos;
@@ -2111,7 +2283,6 @@
       const percent = Math.min((usedKB / maxKB) * 100, 100).toFixed(1);
       document.getElementById('statStorage').textContent = `${percent}%`;
 
-      // Добавляем обработчики кликов для статистических показателей
       document.getElementById('statTotal').parentElement.onclick = filterAllItems;
       document.getElementById('statTotal').parentElement.style.cursor = 'pointer';
   
@@ -2142,9 +2313,28 @@
       });
     }
 
+    // Экспорт с фото
     function exportData() {
       try {
-        const dataStr = JSON.stringify(state.items, null, 2);
+        // Собираем все фото, связанные с предметами
+        const photos = {};
+        state.items.forEach(item => {
+          if (item.photoId) {
+            const photoData = localStorage.getItem(item.photoId);
+            if (photoData) {
+              photos[item.photoId] = photoData;
+            }
+          }
+        });
+
+        const exportObj = {
+          items: state.items,
+          photos: photos,
+          exportDate: new Date().toISOString(),
+          version: '1.0'
+        };
+
+        const dataStr = JSON.stringify(exportObj, null, 2);
         const dataBlob = new Blob([dataStr], { type: 'application/json' });
         const url = URL.createObjectURL(dataBlob);
         const link = document.createElement('a');
@@ -2152,14 +2342,16 @@
         link.href = url;
         link.download = `homestock_backup_${timestamp}_${state.items.length}items.json`;
         link.click();
-        URL.revokeObjectURL(url);
-        showToast('✅ База экспортирована', 'success');
+        setTimeout(() => URL.revokeObjectURL(url), 100);
+        showToast(`✅ База экспортирована (включая ${Object.keys(photos).length} фото)`, 'success');
         closeStatsModal();
       } catch (error) {
-        showToast('❌ Ошибка экспорта', 'error');
+        console.error('Ошибка экспорта:', error);
+        showToast('❌ Ошибка экспорта: ' + error.message, 'error');
       }
     }
 
+    // Импорт с восстановлением фото
     function importData(input) {
       const file = input.files[0];
       if (!file) return;
@@ -2168,34 +2360,94 @@
       reader.onload = (e) => {
         try {
           const imported = JSON.parse(e.target.result);
-          if (!Array.isArray(imported)) {
+
+          // Проверка формата
+          if (!imported.items || !Array.isArray(imported.items)) {
             showToast('❌ Неверный формат файла', 'error');
             return;
           }
 
+          const importedItems = imported.items;
+          const importedPhotos = imported.photos || {};
+
+          if (importedItems.length === 0) {
+            showToast('⚠️ Файл не содержит предметов', 'warning');
+            return;
+          }
+
+          // Оценка размера фото
+          let totalPhotoSize = 0;
+          Object.values(importedPhotos).forEach(photoData => {
+            totalPhotoSize += new Blob([photoData]).size;
+          });
+
+          const maxSize = CONFIG.MAX_STORAGE_MB * 1024 * 1024;
+          const currentSize = new Blob([localStorage.getItem(CONFIG.STORAGE_KEY) || '']).size;
+
+          if (currentSize + totalPhotoSize > maxSize) {
+            if (!confirm(`⚠️ Импорт фото займёт ~${(totalPhotoSize / 1024 / 1024).toFixed(1)} МБ, что может превысить лимит хранилища. Продолжить?`)) {
+              return;
+            }
+          }
+
           const action = confirm(
-            `Найдено ${imported.length} вещей.\n\n✅ ОК - Заменить текущую базу\n❌ Отмена - Объединить с текущей`
+            `Найдено ${importedItems.length} вещей и ${Object.keys(importedPhotos).length} фото.\n\n✅ ОК - Заменить текущую базу\n❌ Отмена - Объединить с текущей`
           );
 
+          // Если замена, удаляем все старые фото
           if (action) {
-            state.items = imported;
+            const keysToRemove = [];
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i);
+              if (key && key.startsWith('photo_')) {
+                keysToRemove.push(key);
+              }
+            }
+            keysToRemove.forEach(key => localStorage.removeItem(key));
+          }
+
+          // Восстанавливаем фото из импорта
+          let photosRestored = 0;
+          for (const [photoId, photoData] of Object.entries(importedPhotos)) {
+            try {
+              localStorage.setItem(photoId, photoData);
+              photosRestored++;
+            } catch (e) {
+              if (e.name === 'QuotaExceededError') {
+                showToast('❌ Недостаточно места для восстановления всех фото', 'error');
+                break;
+              }
+              console.error('Ошибка сохранения фото:', e);
+            }
+          }
+
+          if (photosRestored < Object.keys(importedPhotos).length) {
+            showToast(`⚠️ Восстановлено только ${photosRestored} из ${Object.keys(importedPhotos).length} фото`, 'warning');
+          } else if (photosRestored > 0) {
+            showToast(`✅ Восстановлено ${photosRestored} фото`, 'success');
+          }
+
+          // Работа с предметами
+          if (action) {
+            state.items = importedItems;
           } else {
-            // При объединении избегаем дубликатов ID
             const existingIds = new Set(state.items.map(i => i.id));
-            imported.forEach(item => {
+            importedItems.forEach(item => {
               if (!existingIds.has(item.id)) {
                 state.items.push(item);
               } else {
-                // Генерируем новый ID, если такой уже есть
-                const newItem = { ...item, id: Date.now() + Math.floor(Math.random() * 1000) };
+                const newItem = { 
+                  ...item, 
+                  id: Date.now() + Math.floor(Math.random() * 10000) + performance.now()
+                };
                 state.items.push(newItem);
               }
             });
           }
 
           saveItems();
-          renderItems();
-          showToast(`✅ Импортировано ${imported.length} вещей`, 'success');
+          resetPagination();
+          showToast(`✅ Импортировано ${importedItems.length} вещей`, 'success');
           closeStatsModal();
         } catch (error) {
           showToast('❌ Ошибка импорта: ' + error.message, 'error');
@@ -2215,11 +2467,19 @@
     }
 
     function clearDatabase() {
-      // Подтверждение уже получено через модальное окно
       state.items = [];
+      
+      // Удаляем все фото из localStorage
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('photo_')) {
+          localStorage.removeItem(key);
+        }
+      }
+      
       localStorage.removeItem(CONFIG.STORAGE_KEY);
       updateStorageIndicator();
-      renderItems();
+      resetPagination();
       closeClearConfirm();
       closeStatsModal();
       showToast('✅ База данных очищена!', 'success');
@@ -2285,7 +2545,6 @@
         return;
       }
 
-      // +++ Проверка количества +++
       const quantityNum = parseInt(quantity);
       if (isNaN(quantityNum) || quantityNum < 1) {
         showToast('⚠️ Количество должно быть положительным числом', 'warning');
@@ -2295,18 +2554,16 @@
         showToast('⚠️ Максимальное количество — ' + CONFIG.MAX_QUANTITY, 'warning');
         return;
       }
-      // ============================
 
       const duplicates = findDuplicates(name, category, location, shelf);
 
       if (duplicates.length > 0) {
-        // Сохраняем файл и данные, используя числовое количество
         const photoFile = photoInput.files[0] || null;
         state.duplicateItemId = duplicates[0].id;
         state.pendingItem = {
           name,
           category,
-          quantity: quantityNum,   // теперь число
+          quantity: quantityNum,
           location,
           shelf,
           notes,
@@ -2320,7 +2577,7 @@
         document.getElementById('dupLocation').textContent = duplicates[0].location;
         document.getElementById('dupShelf').textContent = duplicates[0].shelf || 'Не задано';
         document.getElementById('dupQuantity').textContent = duplicates[0].quantity;
-        document.getElementById('addQty').textContent = quantityNum; // используем число
+        document.getElementById('addQty').textContent = quantityNum;
 
         if (duplicates[0].notes && duplicates[0].notes.trim()) {
           document.getElementById('dupNotesRow').style.display = 'block';
@@ -2331,7 +2588,7 @@
 
         const newCopyName = `${baseName} (Копия ${state.copyNumber})`;
         document.getElementById('newName').textContent = newCopyName;
-        document.getElementById('newQuantity').textContent = quantityNum; // число
+        document.getElementById('newQuantity').textContent = quantityNum;
         document.getElementById('copyLabel').textContent = `(Копия ${state.copyNumber})`;
         document.getElementById('duplicatePreview').style.display = 'block';
 
@@ -2339,31 +2596,29 @@
         return;
       }
 
-      // Нет дубликатов — сразу добавляем
       await processNewItem(name, category, quantityNum, location, shelf, notes, photoInput.files[0]);
     }
 
     async function processNewItem(name, category, quantity, location, shelf, notes, photoFile) {
       try {
         let photoId = null;
+        let photoData = null;
     
-        // Если есть фото, сохраняем его отдельно
         if (photoFile) {
           await validatePhotoSize(photoFile);
           showToast('⏳ Сжатие фото...', 'info');
-          const photoData = await compressImage(photoFile);
+          photoData = await compressImage(photoFile);
+          
+          if (!photoData) return; // пользователь отменил
       
-          // Генерируем уникальный ID для фото
-          photoId = 'photo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-      
-          // Сохраняем фото в отдельный ключ localStorage
-          localStorage.setItem(photoId, photoData);
-      
-          const sizeKB = (new Blob([photoData]).size / 1024).toFixed(1);
-          showToast(`✅ Фото сжато до ${sizeKB} КБ`, 'success');
+          // Проверка места перед сохранением
+          const blob = new Blob([photoData]);
+          if (!checkStorageSpace(blob.size)) {
+            showToast('❌ Операция отменена', 'warning');
+            return;
+          }
         }
 
-        // В предмете храним только ссылку на фото (photoId)
         const newItem = {
           id: Date.now(),
           name,
@@ -2372,19 +2627,36 @@
           location,
           shelf: shelf || '',
           notes,
-          photoId: photoId, // вместо photo: photoData
+          photoId: null, // временно
           createdAt: new Date().toISOString()
         };
 
+        // Если есть фото – сохраняем и присваиваем photoId
+        if (photoData) {
+          photoId = 'photo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+          try {
+            localStorage.setItem(photoId, photoData);
+          } catch (e) {
+            if (e.name === 'QuotaExceededError') {
+              showToast('❌ Недостаточно места в хранилище', 'error');
+              return;
+            }
+            throw e;
+          }
+          newItem.photoId = photoId;
+          
+          const sizeKB = (new Blob([photoData]).size / 1024).toFixed(1);
+          showToast(`✅ Фото сжато до ${sizeKB} КБ`, 'success');
+        }
+
         state.items.push(newItem);
-        saveItems(); // сохраняем только текстовые данные
+        saveItems(); // теперь фото уже в хранилище, предмет добавлен
     
-        // Очищаем поиск перед рендерингом
         const searchInput = document.getElementById('search');
         searchInput.value = '';
         updateSearchClearButton();
     
-        renderItems();
+        resetPagination();
         clearForm();
         showToast('✅ Вещь добавлена', 'success');
 
@@ -2398,7 +2670,6 @@
       const item = state.items.find(i => i.id === state.duplicateItemId);
       if (!item) return;
 
-      // +++ Проверка текущего и добавляемого количества +++
       const currentQty = parseInt(item.quantity);
       const addQty = parseInt(state.pendingItem.quantity);
       if (isNaN(currentQty) || isNaN(addQty) || addQty < 1) {
@@ -2406,7 +2677,6 @@
         closeDuplicateModal();
         return;
       }
-      // ====================================================
 
       const newQty = currentQty + addQty;
       if (newQty > CONFIG.MAX_QUANTITY) {
@@ -2416,7 +2686,7 @@
       }
       item.quantity = newQty;
       saveItems();
-      renderItems();
+      resetPagination();
       clearForm();
       showToast('✅ Количество обновлено', 'success');
       closeDuplicateModal();
@@ -2433,7 +2703,7 @@
           state.pendingItem.location,
           state.pendingItem.shelf,
           state.pendingItem.notes,
-          state.pendingItem.photoFile   // передаём файл, а не input
+          state.pendingItem.photoFile
         );
       }
       closeDuplicateModal();
@@ -2453,6 +2723,11 @@
 
     async function addItem() {
       const editId = document.getElementById('editId').value;
+      if (!editId) {
+        showToast('⚠️ Не выбран элемент для редактирования', 'warning');
+        return;
+      }
+
       const name = document.getElementById('name').value.trim();
       const category = document.getElementById('category').value;
       const quantity = document.getElementById('quantity').value;
@@ -2461,7 +2736,6 @@
       const notes = document.getElementById('notes').value.trim();
       const photoInput = document.getElementById('photo');
 
-      // +++ Проверка количества +++
       const quantityNum = parseInt(quantity);
       if (isNaN(quantityNum) || quantityNum < 1) {
         showToast('⚠️ Количество должно быть положительным числом', 'warning');
@@ -2471,47 +2745,74 @@
         showToast('⚠️ Максимальное количество — ' + CONFIG.MAX_QUANTITY, 'warning');
         return;
       }
-      // ============================
 
-      // Находим редактируемый предмет
       const itemIndex = state.items.findIndex(item => item.id == editId);
-      if (itemIndex === -1) return;
+      if (itemIndex === -1) {
+        showToast('⚠️ Элемент не найден', 'error');
+        return;
+      }
   
       const existingItem = state.items[itemIndex];
+      let newPhotoId = existingItem.photoId;
+      let photoDataToSave = null;
 
-      // Обрабатываем новое фото, если оно загружено
-      let newPhotoId = existingItem.photoId; // по умолчанию оставляем старое фото
-
+      // Обработка нового фото (если загружено)
       if (photoInput.files && photoInput.files[0]) {
+        const file = photoInput.files[0];
+        
+        if (file.size > CONFIG.MAX_PHOTO_SIZE_MB * 1024 * 1024) {
+          showToast(`❌ Фото слишком большое (макс. ${CONFIG.MAX_PHOTO_SIZE_MB} МБ)`, 'error');
+          return;
+        }
+        
+        if (!file.type.startsWith('image/')) {
+          showToast('❌ Файл должен быть изображением', 'error');
+          return;
+        }
+        
         try {
-          // Проверяем размер
-          await validatePhotoSize(photoInput.files[0]);
           showToast('⏳ Сжатие фото...', 'info');
-      
-          // Сжимаем новое фото
-          const photoData = await compressImage(photoInput.files[0]);
-      
-          // Генерируем новый ID для фото
-          newPhotoId = 'photo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-      
-          // Сохраняем новое фото в отдельный ключ
-          localStorage.setItem(newPhotoId, photoData);
-      
-          // Удаляем старое фото, если оно было
-          if (existingItem.photoId) {
-            localStorage.removeItem(existingItem.photoId);
+          photoDataToSave = await compressImage(file);
+          
+          if (!photoDataToSave) return; // пользователь отменил
+
+          // Проверка места перед сохранением
+          const blob = new Blob([photoDataToSave]);
+          if (!checkStorageSpace(blob.size)) {
+            showToast('❌ Операция отменена', 'warning');
+            return;
           }
-      
-          const sizeKB = (new Blob([photoData]).size / 1024).toFixed(1);
-          showToast(`✅ Новое фото сжато до ${sizeKB} КБ`, 'success');
-      
         } catch (error) {
           showToast('❌ Ошибка при обработке фото: ' + error.message, 'error');
           return;
         }
       }
 
-      // Обновляем данные предмета
+      // Если есть новые данные фото – сохраняем и удаляем старое
+      if (photoDataToSave) {
+        newPhotoId = 'photo_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        try {
+          localStorage.setItem(newPhotoId, photoDataToSave);
+        } catch (e) {
+          if (e.name === 'QuotaExceededError') {
+            showToast('❌ Недостаточно места в хранилище', 'error');
+            return;
+          }
+          throw e;
+        }
+        
+        if (existingItem.photoId) {
+          try {
+            localStorage.removeItem(existingItem.photoId);
+          } catch (e) {
+            console.warn('Не удалось удалить старое фото:', e);
+          }
+        }
+        
+        const sizeKB = (new Blob([photoDataToSave]).size / 1024).toFixed(1);
+        showToast(`✅ Новое фото сжато до ${sizeKB} КБ`, 'success');
+      }
+
       const updatedItem = {
         ...existingItem,
         name: name,
@@ -2520,25 +2821,19 @@
         location: location,
         shelf: shelf,
         notes: notes,
-        photoId: newPhotoId, // может быть null, если фото удалили
+        photoId: newPhotoId,
       };
 
-      // Заменяем старый предмет обновлённым
       state.items[itemIndex] = updatedItem;
+      saveItems(); // предмет обновлён, фото уже сохранено
   
-      // Сохраняем изменения
-      saveItems();
-  
-      // Очищаем поиск перед рендерингом
       const searchInput = document.getElementById('search');
       searchInput.value = '';
       updateSearchClearButton();
   
-      // Обновляем отображение
-      renderItems();
+      resetPagination();
       cancelEdit();
 
-      // Если открыто детальное окно с этим предметом, обновляем его
       if (state.currentDetailId == editId) {
         openDetailModal(editId);
       }
@@ -2548,94 +2843,52 @@
     
     function removeCurrentPhoto() {
       const editId = document.getElementById('editId').value;
-      if (!editId) return;
-  
+      if (!editId) {
+        showToast('⚠️ Не выбран элемент для редактирования', 'warning');
+        return;
+      }
+      
       const item = state.items.find(i => i.id == editId);
-      if (!item || !item.photoId) return;
-  
-      // Удаляем фото из хранилища
-      localStorage.removeItem(item.photoId);
-  
-      // Обновляем объект предмета (убираем photoId)
+      if (!item) {
+        showToast('⚠️ Элемент не найден', 'error');
+        return;
+      }
+      
+      if (!item.photoId) {
+        showToast('⚠️ У элемента нет фото', 'info');
+        return;
+      }
+      
+      if (!confirm('Удалить фото?')) return;
+      
+      try {
+        localStorage.removeItem(item.photoId);
+        console.log(`Фото ${item.photoId} удалено из хранилища`);
+      } catch (e) {
+        console.error('Ошибка при удалении фото:', e);
+        showToast('⚠️ Не удалось удалить фото из хранилища', 'warning');
+      }
+      
       item.photoId = null;
-  
-      // Сохраняем изменения
       saveItems();
-  
-      // Обновляем отображение
-      renderItems();
-  
-      // Скрываем кнопку удаления
+      resetPagination();
       document.getElementById('photoDeleteContainer').style.display = 'none';
-  
-      // Если открыто детальное окно, обновляем его
+      
       if (state.currentDetailId == editId) {
         openDetailModal(editId);
       }
-  
+      
       showToast('✅ Фото удалено', 'success');
-    }
-
-    function sortItems(itemsToSort) {
-      const sorted = [...itemsToSort];
-      const type = document.getElementById('sortSelect').value;
-
-      switch (type) {
-        case 'newest':
-          sorted.sort((a, b) => {
-            const da = a.createdAt ? new Date(a.createdAt) : 0;
-            const db = b.createdAt ? new Date(b.createdAt) : 0;
-            return db - da;
-          });
-          break;
-        case 'oldest':
-          sorted.sort((a, b) => {
-            const da = a.createdAt ? new Date(a.createdAt) : 0;
-            const db = b.createdAt ? new Date(b.createdAt) : 0;
-            return da - db;
-          });
-          break;
-        case 'name-asc':
-          sorted.sort((a, b) => a.name.localeCompare(b.name, 'ru'));
-          break;
-        case 'name-desc':
-          sorted.sort((a, b) => b.name.localeCompare(a.name, 'ru'));
-          break;
-      }
-
-      return sorted;
-    }
-
-    function escapeHtml(text) {
-      if (!text) return '';
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
     }
 
     function renderItems() {
       const container = document.getElementById('itemsContainer');
-      const search = document.getElementById('search').value.toLowerCase();
 
-      let filtered = state.items.filter(item => {
-        // Если поиск равен '📷', фильтруем по наличию фото
-        if (search === '📷') {
-          return item.photoId; // true если есть photoId
-        }
-    
-        // Иначе обычный поиск
-        return item.name.toLowerCase().includes(search) ||
-               item.category.toLowerCase().includes(search) ||
-               item.location.toLowerCase().includes(search) ||
-               (item.shelf && item.shelf.toLowerCase().includes(search)) ||
-               (item.notes && item.notes.toLowerCase().includes(search));
-      });
-
-      filtered = sortItems(filtered);
-
-      if (filtered.length === 0) {
+      if (state.filteredItems.length === 0) {
         let emptyMessage = 'Вещи не найдены';
         let emptyIcon = '📦';
+        const search = document.getElementById('search').value;
+        
         if (search === '📷') {
           emptyMessage = 'Товары с фото не найдены';
           emptyIcon = '📷';
@@ -2655,7 +2908,7 @@
       container.innerHTML = '';
       const fragment = document.createDocumentFragment();
 
-      filtered.forEach(item => {
+      state.displayedItems.forEach(item => {
         const card = createItemCard(item);
         fragment.appendChild(card);
       });
@@ -2670,7 +2923,6 @@
         if (!e.target.closest('button')) openDetailModal(item.id);
       };
 
-      // Получаем фото по photoId, если оно есть
       let imgDisplay = '<div class="item-img">📷</div>';
       if (item.photoId) {
         const photoData = localStorage.getItem(item.photoId);
@@ -2685,12 +2937,14 @@
 
       const shelfDisplay = item.shelf && item.shelf.trim() ? escapeHtml(item.shelf) : '—';
       const locationDisplay = escapeHtml(item.location);
+      
+      const categoryWithEmoji = getCategoryWithEmoji(item.category);
 
       card.innerHTML = `
         ${imgDisplay}
         <div class="item-body">
           <div class="item-title">${escapeHtml(item.name)}</div>
-          <span class="item-cat">${escapeHtml(item.category)}</span>
+          <span class="item-cat">${categoryWithEmoji}</span>
           <div class="item-details item-location">📍 ${locationDisplay}</div>
           <div class="item-details">📦 ${shelfDisplay}</div>
           <div class="item-details">🔢 Кол-во: ${item.quantity}</div>
@@ -2719,23 +2973,28 @@
       const qrCanvas = document.getElementById('qrcode');
       if (!qrCanvas) return;
 
-      // Получаем canvas как Blob
       qrCanvas.toBlob((blob) => {
         if (!blob) {
           showToast('Не удалось создать изображение QR', 'error');
           return;
         }
 
-        // Создаём временный URL для Blob
         const blobUrl = URL.createObjectURL(blob);
 
-        // Создаём окно для печати
         const printWindow = window.open('', '_blank');
         if (!printWindow) {
           showToast('Не удалось открыть окно для печати. Разрешите всплывающие окна.', 'error');
           URL.revokeObjectURL(blobUrl);
           return;
         }
+
+        // Освобождаем URL после загрузки или закрытия окна
+        const cleanup = () => {
+          URL.revokeObjectURL(blobUrl);
+          printWindow.removeEventListener('unload', cleanup);
+        };
+        printWindow.addEventListener('unload', cleanup);
+
         printWindow.document.write(`
           <!DOCTYPE html>
           <html>
@@ -2786,12 +3045,9 @@
               ${item.notes ? `<p><strong>📝 Заметка:</strong> ${escapeHtml(item.notes)}</p>` : ''}
             </div>
             <script>
-              // Очищаем URL после загрузки изображения, но не сразу
               window.onload = function() {
                 setTimeout(() => {
                   window.print();
-                  // Можно закрыть окно после печати (раскомментируйте при желании)
-                  // window.onafterprint = () => window.close();
                 }, 100);
               };
             <\/script>
@@ -2800,11 +3056,6 @@
         `);
 
         printWindow.document.close();
-        // Освобождаем blobUrl после того, как окно загрузит изображение
-        // (но не раньше, иначе изображение исчезнет)
-        setTimeout(() => {
-          URL.revokeObjectURL(blobUrl);
-        }, 5000); // для надёжности
       }, 'image/png');
     }
 
@@ -2816,6 +3067,8 @@
       document.getElementById('quantity').value = '1';
       document.getElementById('photo').value = '';
       document.getElementById('category').value = 'Запчасти';
+      // Скрываем кнопку удаления фото
+      document.getElementById('photoDeleteContainer').style.display = 'none';
     }
 
     function editItem(id) {
@@ -2831,14 +3084,12 @@
       document.getElementById('notes').value = item.notes || '';
       document.getElementById('photo').value = '';
 
-      // +++ Показываем кнопку удаления фото, если у предмета есть фото +++
       const photoDeleteContainer = document.getElementById('photoDeleteContainer');
       if (item.photoId) {
         photoDeleteContainer.style.display = 'block';
       } else {
         photoDeleteContainer.style.display = 'none';
       }
-      // ============================================================
 
       document.getElementById('btnAdd').textContent = '💾 Сохранить';
       document.getElementById('btnAdd').style.backgroundColor = 'var(--secondary)';
@@ -2853,29 +3104,31 @@
       document.getElementById('btnAdd').textContent = '➕ Добавить в каталог';
       document.getElementById('btnAdd').style.backgroundColor = 'var(--primary)';
       document.getElementById('btnCancel').style.display = 'none';
-      // +++ Скрываем кнопку удаления фото +++
       document.getElementById('photoDeleteContainer').style.display = 'none';
-      // ======================================
       state.isEditing = false;
     }
 
     function deleteItem(id) {
-      if (confirm('Удалить эту вещь?')) {
-        const item = state.items.find(i => i.id === id);
+      if (!confirm('Удалить эту вещь?')) return;
+      
+      const item = state.items.find(i => i.id === id);
+      if (!item) return;
     
-        // Удаляем фото из отдельного хранилища, если оно есть
-        if (item && item.photoId) {
+      if (item && item.photoId) {
+        try {
           localStorage.removeItem(item.photoId);
+        } catch (e) {
+          console.warn('Не удалось удалить фото:', e);
         }
+      }
     
-        state.items = state.items.filter(item => item.id !== id);
-        saveItems();
-        renderItems();
-        showToast('✅ Вещь удалена', 'success');
+      state.items = state.items.filter(item => item.id !== id);
+      saveItems();
+      resetPagination();
+      showToast('✅ Вещь удалена', 'success');
 
-        if (state.currentDetailId == id) {
-          closeDetailModal();
-        }
+      if (state.currentDetailId == id) {
+        closeDetailModal();
       }
     }
 
@@ -2903,7 +3156,7 @@
       }
 
       document.getElementById('detailTitle').textContent = item.name;
-      document.getElementById('detailCategory').textContent = item.category;
+      document.getElementById('detailCategory').textContent = getCategoryWithEmoji(item.category);
       document.getElementById('detailLocation').textContent = item.location;
       document.getElementById('detailShelf').textContent = item.shelf && item.shelf.trim() ? item.shelf : 'Не задано';
       document.getElementById('detailQuantity').textContent = item.quantity;
@@ -2918,9 +3171,17 @@
       }
 
       if (item.createdAt) {
-        const date = new Date(item.createdAt);
-        document.getElementById('detailCreated').textContent =
-          `Добавлено: ${date.toLocaleDateString('ru-RU')} в ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+        try {
+          const date = new Date(item.createdAt);
+          if (!isNaN(date.getTime())) {
+            document.getElementById('detailCreated').textContent =
+              `Добавлено: ${date.toLocaleDateString('ru-RU')} в ${date.toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' })}`;
+          } else {
+            document.getElementById('detailCreated').textContent = '';
+          }
+        } catch {
+          document.getElementById('detailCreated').textContent = '';
+        }
       } else {
         document.getElementById('detailCreated').textContent = '';
       }
@@ -2960,10 +3221,10 @@
     }
 
     function editFromDetail() {
-      const id = state.currentDetailId; // сохраняем ID
+      const id = state.currentDetailId;
       if (id) {
-        closeDetailModal(); // закрываем детальное окно (сбрасывает state.currentDetailId)
-        editItem(id);       // открываем форму редактирования с сохранённым ID
+        closeDetailModal();
+        editItem(id);
       }
     }
 
@@ -2989,12 +3250,10 @@
       }
     }
 
-    // Функция showQR с использованием QRCode.toCanvas
     function showQR(id, fromDetail = false) {
       const item = state.items.find(i => i.id === id);
       if (!item) return;
 
-      // Проверяем, загрузилась ли библиотека
       if (typeof QRCode === 'undefined' || typeof QRCode.toCanvas !== 'function') {
         showToast('❌ Библиотека QR не загружена', 'error');
         return;
@@ -3006,7 +3265,7 @@
       const btnBack = document.getElementById('btnBackToDetail');
       const btnClose = document.getElementById('btnCloseQR');
       const btnPrint = document.getElementById('btnPrintQR');
-      btnPrint.style.display = ''; // сброс к значению из CSS
+      btnPrint.style.display = '';
 
       qrTitle.textContent = item.name;
 
@@ -3018,21 +3277,15 @@
         btnClose.style.display = 'block';
       }
 
-      // === НОВЫЙ ФОРМАТ QR-ДАННЫХ С МЕТКАМИ ===
-      let qrData = item.name; // название без метки
-
-      // Место
+      let qrData = item.name;
       qrData += `\n\n📍 Место: ${item.location}`;
 
-      // Полка, если есть
       if (item.shelf && item.shelf.trim()) {
         qrData += `\n\n📦 Полка: ${item.shelf}`;
       }
 
-      // Количество
       qrData += `\n\n🔢 Количество: ${item.quantity}`;
 
-      // Заметка, если есть (обрезаем до 50 символов)
       if (item.notes && item.notes.trim()) {
         let note = item.notes.trim();
         if (note.length > 50) {
@@ -3041,23 +3294,16 @@
         qrData += `\n\n📝 Заметка: ${note}`;
       }
 
-      // Проверяем длину и при необходимости обрезаем
-
-      //Убедитесь, что при обрезке вы отнимаете 3 символа для троеточия: 300 → 297, 500 → 497, 800 → 797
       if (qrData.length > 500) {
         qrData = qrData.substring(0, 497) + '…';
         showToast('Текст сокращён для QR', 'warning');
       }
-      // =====================================
 
-      // Цвета в зависимости от темы
       const darkColor = state.currentTheme === 'dark' ? '#ffffff' : '#000000';
       const lightColor = state.currentTheme === 'dark' ? '#000000' : '#ffffff';
 
-      // Показываем модалку ДО рендеринга, чтобы canvas был видим
       modal.style.display = 'flex';
 
-      // Генерация QR-кода
       QRCode.toCanvas(qrCanvas, qrData, {
         width: 220,
         color: {
@@ -3086,6 +3332,7 @@
       const duplicateModal = document.getElementById('duplicateModal');
       const clearModal = document.getElementById('clearConfirmModal');
       const statsModal = document.getElementById('statsModal');
+      const zoomModal = document.getElementById('zoomModal');
 
       if (event.target == qrModal) {
         if (state.qrOpenedFromDetail) backToDetail();
@@ -3100,23 +3347,24 @@
     // === ЕДИНЫЙ ОБРАБОТЧИК КЛАВИШИ ESC ===
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        // Зум-модалка имеет наивысший приоритет
         const zoomModal = document.getElementById('zoomModal');
-        if (zoomModal.classList.contains('show')) {
-          closeZoomModal({ target: zoomModal });
-          return;
-        }
+        const qrModal = document.getElementById('qrModal');
+        const detailModal = document.getElementById('detailModal');
+        const duplicateModal = document.getElementById('duplicateModal');
+        const statsModal = document.getElementById('statsModal');
+        const clearModal = document.getElementById('clearConfirmModal');
 
-        const modals = [
-          { id: 'clearConfirmModal', fn: closeClearConfirm },
-          { id: 'duplicateModal', fn: cancelAddDuplicate },
-          { id: 'qrModal', fn: () => state.qrOpenedFromDetail ? backToDetail() : closeQRModal() },
-          { id: 'detailModal', fn: closeDetailModal },
-          { id: 'statsModal', fn: closeStatsModal }
+        const modalsInOrder = [
+          { fn: () => closeZoomModal({ target: zoomModal }), check: () => zoomModal.classList.contains('show') },
+          { fn: () => state.qrOpenedFromDetail ? backToDetail() : closeQRModal(), check: () => qrModal.style.display === 'flex' },
+          { fn: closeDetailModal, check: () => detailModal.style.display === 'flex' && !state.qrOpenedFromDetail },
+          { fn: cancelAddDuplicate, check: () => duplicateModal.style.display === 'flex' },
+          { fn: closeStatsModal, check: () => statsModal.style.display === 'flex' },
+          { fn: closeClearConfirm, check: () => clearModal.style.display === 'flex' }
         ];
 
-        for (const modal of modals) {
-          if (document.getElementById(modal.id).style.display === 'flex') {
+        for (const modal of modalsInOrder) {
+          if (modal.check()) {
             modal.fn();
             break;
           }
