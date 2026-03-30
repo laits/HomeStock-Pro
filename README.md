@@ -1,4 +1,4 @@
-# 🎒 HomeStock Pro  
+# 🎒 Что где находится?  
 Удобное офлайн‑приложение для учёта домашних вещей
 
 ![Status](https://img.shields.io/badge/Status-Active-brightgreen)
